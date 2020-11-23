@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "fr.easybilling",
+      "nativeLanguage": "fr"
+    },
+    "jhipsterVersion": "6.10.3",
+    "applicationType": "monolith",
+    "baseName": "EasyBilling",
+    "packageName": "fr.easybilling",
+    "packageFolder": "fr/easybilling",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MTRkMGIzYThiMzMxODQ3OTVhN2Y2NTBmMjg4N2Q2YzdiNWVhNDY3Mjg3Njk3OGRhMWUzN2VjY2YyMThiNjQzMTY4Y2I4NWFiY2Y2OGUxN2Q0Y2U5NjRhYjU4ZmM0ZjQxZThjNjhmNTY4MTk5MWM3OTExNzU3YThhODIxNjgzNDE=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1606165490612,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "fr",
+    "languages": ["fr"],
+    "blueprints": [],
+    "skipClient": true
+  }
+}
