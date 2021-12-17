@@ -1,0 +1,56 @@
+entity Facture {
+	id Long
+    creationDate LocalDate
+    echeanceDate LocalDate
+    tva BigDecimal
+    status String
+}
+
+entity LigneFacture {
+	intitule String
+    quantite Integer
+    prixHt BigDecimal
+}
+
+relationship ManyToOne {
+	Facture{destinataire} to Tiers
+}
+
+relationship OneToMany {
+	Facture{lignes} to LigneFacture
+}
+
+entity Entreprise {
+	id Long
+    creationDate LocalDate
+}
+
+relationship ManyToOne {
+	Facture{entreprise} to Entreprise
+}
+
+relationship OneToOne {
+	Entreprise{tiers} to Tiers
+}
+
+entity Tiers {
+    raisonSociale String
+    adr1 String
+    adr2 String
+    adr3 String
+    codePostal String
+    ville String
+    pays String
+    email String
+    inscrit Boolean
+}
+
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except LigneFacture
+
+// Set an angular suffix
+// angularSuffix * with mySuffix

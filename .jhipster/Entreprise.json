@@ -1,0 +1,30 @@
+{
+  "name": "Entreprise",
+  "fields": [
+    {
+      "fieldName": "creationDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "tiers",
+      "otherEntityRelationshipName": "entreprise",
+      "relationshipName": "tiers",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20201125154041",
+  "entityTableName": "entreprise",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

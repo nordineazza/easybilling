@@ -1,0 +1,53 @@
+{
+  "name": "Tiers",
+  "fields": [
+    {
+      "fieldName": "raisonSociale",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adr1",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adr2",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adr3",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "codePostale",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ville",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "pays",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "inscrit",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20201125154141",
+  "entityTableName": "tiers",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

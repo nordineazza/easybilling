@@ -48,6 +48,11 @@ public class CacheConfiguration {
             createCache(cm, fr.easybilling.domain.User.class.getName());
             createCache(cm, fr.easybilling.domain.Authority.class.getName());
             createCache(cm, fr.easybilling.domain.User.class.getName() + ".authorities");
+            createCache(cm, fr.easybilling.domain.Facture.class.getName());
+            createCache(cm, fr.easybilling.domain.Facture.class.getName() + ".lignes");
+            createCache(cm, fr.easybilling.domain.LigneFacture.class.getName());
+            createCache(cm, fr.easybilling.domain.Entreprise.class.getName());
+            createCache(cm, fr.easybilling.domain.Tiers.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
