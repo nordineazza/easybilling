@@ -18,7 +18,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "codePostale",
+      "fieldName": "codePostal",
       "fieldType": "String"
     },
     {

@@ -56,7 +56,7 @@ public class FactureResource {
     /**
      * {@code POST  /factures} : Create a new facture.
      *
-     * @param facture the facture to create.
+     * @param form the facture to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new facture, or with status {@code 400 (Bad Request)} if the facture has already an ID.
      */
     @PostMapping("/factures")
@@ -74,7 +74,7 @@ public class FactureResource {
         tiers.setAdr1(form.getAdr1());
         tiers.setAdr2(form.getAdr2());
         tiers.setAdr3(form.getAdr3());
-        tiers.setCodePostale(form.getCodePostal());
+        tiers.setCodePostal(form.getCodePostal());
         tiers.setVille(form.getVille());
         tiers.setEmail(form.getEmail());
         tiers.setInscrit(false);
@@ -178,23 +178,4 @@ public class FactureResource {
 
         return ResponseEntity.ok().headers(header).body(resource);
     }
-
-    /**
-    @GetMapping(value = "/factures/{id}/pdf", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<Void> getFacturePdf(@PathVariable long id, HttpServletResponse response) throws IOException {
-
-        try (OutputStream outputStream = response.getOutputStream()) {
-            ByteArrayOutputStream byteArrayOutputStream = factureService.generateFactureWithJasper(id);
-
-            byte[] bytes = byteArrayOutputStream.toByteArray();
-            outputStream.write(bytes);
-
-            response.setContentLength(bytes.length);
-            response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-            response.setHeader("Content-Disposition", "inline");
-
-            return ResponseEntity.ok().build();
-        }
-    }
-    **/
 }

@@ -18,15 +18,14 @@ public class FactureDTO {
     private String coordonneeDest;
 
     public FactureDTO(long id, LocalDate creationDate, LocalDate echeanceDate, BigDecimal tva, BigDecimal montantHT, String status,
-                      String raisonSocialeEnt, String adr1Ent, String adr2Ent, String adr3Ent, String codePostaleEnt, String villeEnt,
-                      String raisonSocialeDest, String adr1Dest, String adr2Dest, String adr3Dest, String codePostaleDest, String villeDest) {
+                      String raisonSocialeDest, String adr1Dest, String adr2Dest, String adr3Dest, String codePostalDest, String villeDest) {
         this.creationDate = creationDate;
         this.echeanceDate = echeanceDate;
         this.montantHT = montantHT;
         this.montantTTC = montantHT.add(montantHT.multiply(tva)).setScale(2, RoundingMode.CEILING); // Ajout de la TVA pour avoir le montant TTC
         this.status = status;
         this.raisonSocialeDest = raisonSocialeDest;
-        this.coordonneeDest = adr1Dest + " - " + codePostaleDest + " " + villeDest;
+        this.coordonneeDest = adr1Dest + " - " + codePostalDest + " " + villeDest;
         this.id = id;
     }
 

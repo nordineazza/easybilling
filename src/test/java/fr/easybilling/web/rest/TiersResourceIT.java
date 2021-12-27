@@ -42,8 +42,8 @@ public class TiersResourceIT {
     private static final String DEFAULT_ADR_3 = "AAAAAAAAAA";
     private static final String UPDATED_ADR_3 = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CODE_POSTALE = "AAAAAAAAAA";
-    private static final String UPDATED_CODE_POSTALE = "BBBBBBBBBB";
+    private static final String DEFAULT_CODE_POSTAL = "AAAAAAAAAA";
+    private static final String UPDATED_CODE_POSTAL = "BBBBBBBBBB";
 
     private static final String DEFAULT_VILLE = "AAAAAAAAAA";
     private static final String UPDATED_VILLE = "BBBBBBBBBB";
@@ -83,7 +83,7 @@ public class TiersResourceIT {
             .adr1(DEFAULT_ADR_1)
             .adr2(DEFAULT_ADR_2)
             .adr3(DEFAULT_ADR_3)
-            .codePostale(DEFAULT_CODE_POSTALE)
+            .codePostal(DEFAULT_CODE_POSTAL)
             .ville(DEFAULT_VILLE)
             .pays(DEFAULT_PAYS)
             .email(DEFAULT_EMAIL)
@@ -102,7 +102,7 @@ public class TiersResourceIT {
             .adr1(UPDATED_ADR_1)
             .adr2(UPDATED_ADR_2)
             .adr3(UPDATED_ADR_3)
-            .codePostale(UPDATED_CODE_POSTALE)
+            .codePostal(UPDATED_CODE_POSTAL)
             .ville(UPDATED_VILLE)
             .pays(UPDATED_PAYS)
             .email(UPDATED_EMAIL)
@@ -133,7 +133,7 @@ public class TiersResourceIT {
         assertThat(testTiers.getAdr1()).isEqualTo(DEFAULT_ADR_1);
         assertThat(testTiers.getAdr2()).isEqualTo(DEFAULT_ADR_2);
         assertThat(testTiers.getAdr3()).isEqualTo(DEFAULT_ADR_3);
-        assertThat(testTiers.getCodePostale()).isEqualTo(DEFAULT_CODE_POSTALE);
+        assertThat(testTiers.getCodePostal()).isEqualTo(DEFAULT_CODE_POSTAL);
         assertThat(testTiers.getVille()).isEqualTo(DEFAULT_VILLE);
         assertThat(testTiers.getPays()).isEqualTo(DEFAULT_PAYS);
         assertThat(testTiers.getEmail()).isEqualTo(DEFAULT_EMAIL);
@@ -175,7 +175,7 @@ public class TiersResourceIT {
             .andExpect(jsonPath("$.[*].adr1").value(hasItem(DEFAULT_ADR_1)))
             .andExpect(jsonPath("$.[*].adr2").value(hasItem(DEFAULT_ADR_2)))
             .andExpect(jsonPath("$.[*].adr3").value(hasItem(DEFAULT_ADR_3)))
-            .andExpect(jsonPath("$.[*].codePostale").value(hasItem(DEFAULT_CODE_POSTALE)))
+            .andExpect(jsonPath("$.[*].codePostal").value(hasItem(DEFAULT_CODE_POSTAL)))
             .andExpect(jsonPath("$.[*].ville").value(hasItem(DEFAULT_VILLE)))
             .andExpect(jsonPath("$.[*].pays").value(hasItem(DEFAULT_PAYS)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
@@ -197,7 +197,7 @@ public class TiersResourceIT {
             .andExpect(jsonPath("$.adr1").value(DEFAULT_ADR_1))
             .andExpect(jsonPath("$.adr2").value(DEFAULT_ADR_2))
             .andExpect(jsonPath("$.adr3").value(DEFAULT_ADR_3))
-            .andExpect(jsonPath("$.codePostale").value(DEFAULT_CODE_POSTALE))
+            .andExpect(jsonPath("$.codePostal").value(DEFAULT_CODE_POSTAL))
             .andExpect(jsonPath("$.ville").value(DEFAULT_VILLE))
             .andExpect(jsonPath("$.pays").value(DEFAULT_PAYS))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
@@ -228,7 +228,7 @@ public class TiersResourceIT {
             .adr1(UPDATED_ADR_1)
             .adr2(UPDATED_ADR_2)
             .adr3(UPDATED_ADR_3)
-            .codePostale(UPDATED_CODE_POSTALE)
+            .codePostal(UPDATED_CODE_POSTAL)
             .ville(UPDATED_VILLE)
             .pays(UPDATED_PAYS)
             .email(UPDATED_EMAIL)
@@ -247,7 +247,7 @@ public class TiersResourceIT {
         assertThat(testTiers.getAdr1()).isEqualTo(UPDATED_ADR_1);
         assertThat(testTiers.getAdr2()).isEqualTo(UPDATED_ADR_2);
         assertThat(testTiers.getAdr3()).isEqualTo(UPDATED_ADR_3);
-        assertThat(testTiers.getCodePostale()).isEqualTo(UPDATED_CODE_POSTALE);
+        assertThat(testTiers.getCodePostal()).isEqualTo(UPDATED_CODE_POSTAL);
         assertThat(testTiers.getVille()).isEqualTo(UPDATED_VILLE);
         assertThat(testTiers.getPays()).isEqualTo(UPDATED_PAYS);
         assertThat(testTiers.getEmail()).isEqualTo(UPDATED_EMAIL);

@@ -33,8 +33,8 @@ public class Tiers implements Serializable {
     @Column(name = "adr_3")
     private String adr3;
 
-    @Column(name = "code_postale")
-    private String codePostale;
+    @Column(name = "code_postal")
+    private String codePostal;
 
     @Column(name = "ville")
     private String ville;
@@ -109,17 +109,17 @@ public class Tiers implements Serializable {
         this.adr3 = adr3;
     }
 
-    public String getCodePostale() {
-        return codePostale;
+    public String getCodePostal() {
+        return codePostal;
     }
 
-    public Tiers codePostale(String codePostale) {
-        this.codePostale = codePostale;
+    public Tiers codePostal(String codePostal) {
+        this.codePostal = codePostal;
         return this;
     }
 
-    public void setCodePostale(String codePostale) {
-        this.codePostale = codePostale;
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
     }
 
     public String getVille() {
@@ -200,7 +200,7 @@ public class Tiers implements Serializable {
             ", adr1='" + getAdr1() + "'" +
             ", adr2='" + getAdr2() + "'" +
             ", adr3='" + getAdr3() + "'" +
-            ", codePostale='" + getCodePostale() + "'" +
+            ", codePostal='" + getCodePostal() + "'" +
             ", ville='" + getVille() + "'" +
             ", pays='" + getPays() + "'" +
             ", email='" + getEmail() + "'" +
