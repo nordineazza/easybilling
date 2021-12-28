@@ -50,6 +50,14 @@ public interface FactureService {
     List<FactureDTO> findFacturesByEntreprise();
 
     /**
+     * Get facture by id
+     *
+     * @param id the id of the facture
+     * @return
+     */
+    FactureDTO findFactureById(long id);
+
+    /**
      *
      * @param idFacture
      * @return

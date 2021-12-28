@@ -9,6 +9,7 @@ import fr.easybilling.service.FactureService;
 import fr.easybilling.service.dto.FactureDTO;
 import fr.easybilling.web.rest.errors.BadRequestAlertException;
 
+import fr.easybilling.web.rest.forms.FactureForm;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -64,6 +65,7 @@ public class FactureResource {
         log.debug("REST request to save Facture : {}", form);
 
         Facture facture = new Facture();
+        facture.setId(form.getId());
         facture.setCreationDate(LocalDate.now());
         facture.setStatus(EN_COURS.getStatus());
         facture.setTva(form.getTva());
@@ -107,15 +109,11 @@ public class FactureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/factures")
-    public ResponseEntity<Facture> updateFacture(@RequestBody Facture facture) throws URISyntaxException {
-        log.debug("REST request to update Facture : {}", facture);
-        if (facture.getId() == null) {
+    public ResponseEntity<Facture> updateFacture(@RequestBody FactureForm factureForm) throws URISyntaxException {
+        if (factureForm.getId() == 0) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Facture result = factureService.save(facture);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, facture.getId().toString()))
-            .body(result);
+        return createFacture(factureForm);
     }
 
     /**
@@ -136,10 +134,35 @@ public class FactureResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the facture, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/factures/{id}")
-    public ResponseEntity<Facture> getFacture(@PathVariable Long id) {
+    public ResponseEntity<FactureForm> getFacture(@PathVariable Long id) {
         log.debug("REST request to get Facture : {}", id);
-        Optional<Facture> facture = factureService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(facture);
+        Optional<Facture> optionalFacture = factureService.findOne(id);
+        FactureForm factureForm = new FactureForm();
+        if (optionalFacture.isPresent()) {
+            Facture facture = optionalFacture.get();
+            Tiers clientFacture = facture.getDestinataire();
+
+            factureForm.setAdr1(clientFacture.getAdr1());
+            factureForm.setAdr2(clientFacture.getAdr2());
+            factureForm.setAdr3(clientFacture.getAdr3());
+            factureForm.setRaisonSociale(clientFacture.getRaisonSociale());
+            factureForm.setVille(clientFacture.getVille());
+            factureForm.setCodePostal(clientFacture.getCodePostal());
+            factureForm.setEmail(clientFacture.getEmail());
+            factureForm.setTva(facture.getTva());
+            factureForm.setEcheance(facture.getEcheanceDate());
+
+            for (LigneFacture ligneFacture : facture.getLignes()) {
+                FactureForm.LigneFactureForm ligneForm = new FactureForm.LigneFactureForm();
+                ligneForm.setDetail(ligneFacture.getIntitule());
+                ligneForm.setMontantHT(ligneFacture.getPrixHt());
+                ligneForm.setQuantite(ligneFacture.getQuantite());
+
+                factureForm.getLignesFacture().add(ligneForm);
+            }
+
+        }
+        return ResponseEntity.ok(factureForm);
     }
 
     /**

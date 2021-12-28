@@ -67,6 +67,11 @@ public class FactureServiceImpl implements FactureService {
         return factureRepository.findFacturesByEntreprise();
     }
 
+    @Override
+    public FactureDTO findFactureById(long id) {
+        return factureRepository.findFactureById(id);
+    }
+
     private ByteArrayOutputStream generateFactureWithJasper(Facture facture) {
 
         InputStream jasperInputStream = this.getClass().getResourceAsStream("/jasper/facture.jrxml");

@@ -1,10 +1,12 @@
-package fr.easybilling.web.rest;
+package fr.easybilling.web.rest.forms;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FactureForm {
+    private long id;
     private String raisonSociale;
     private String adr1;
     private String adr2;
@@ -89,8 +91,19 @@ public class FactureForm {
         this.echeance = echeance;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public List<LigneFactureForm> getLignesFacture() {
-        return lignesFacture;
+        if (this.lignesFacture == null) {
+            this.lignesFacture = new ArrayList<>();
+        }
+        return this.lignesFacture;
     }
 
     public void setLignesFacture(List<LigneFactureForm> lignesFacture) {
