@@ -1,11 +1,11 @@
-package fr.easybilling.web.rest.forms;
+package fr.easybilling.web.rest.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FactureForm {
+public class FactureUpdateResponse {
     private long id;
     private String raisonSociale;
     private String adr1;
@@ -15,9 +15,9 @@ public class FactureForm {
     private String ville;
     private String email;
     private BigDecimal tva;
-    private LocalDate echeance;
+    private LocalDate echeanceDate;
 
-    private List<LigneFactureForm> lignesFacture;
+    private List<LigneFactureUpdateResponse> lignesFacture;
 
     public String getRaisonSociale() {
         return raisonSociale;
@@ -83,12 +83,12 @@ public class FactureForm {
         this.tva = tva;
     }
 
-    public LocalDate getEcheance() {
-        return echeance;
+    public LocalDate getEcheanceDate() {
+        return echeanceDate;
     }
 
-    public void setEcheance(LocalDate echeance) {
-        this.echeance = echeance;
+    public void setEcheanceDate(LocalDate echeanceDate) {
+        this.echeanceDate = echeanceDate;
     }
 
     public long getId() {
@@ -99,14 +99,14 @@ public class FactureForm {
         this.id = id;
     }
 
-    public List<LigneFactureForm> getLignesFacture() {
+    public List<LigneFactureUpdateResponse> getLignesFacture() {
         if (this.lignesFacture == null) {
             this.lignesFacture = new ArrayList<>();
         }
         return this.lignesFacture;
     }
 
-    public void setLignesFacture(List<LigneFactureForm> lignesFacture) {
+    public void setLignesFacture(List<LigneFactureUpdateResponse> lignesFacture) {
         this.lignesFacture = lignesFacture;
     }
 
@@ -121,51 +121,8 @@ public class FactureForm {
             ", ville='" + ville + '\'' +
             ", email='" + email + '\'' +
             ", tva=" + tva +
-            ", echeance='" + echeance + '\'' +
+            ", echeance='" + echeanceDate + '\'' +
             ", lignesFacture=" + lignesFacture +
             '}';
     }
-
-    public static class LigneFactureForm {
-        private int quantite;
-        private BigDecimal montantHT;
-        private String detail;
-
-        public LigneFactureForm() {
-        }
-
-        public int getQuantite() {
-            return quantite;
-        }
-
-        public void setQuantite(int quantite) {
-            this.quantite = quantite;
-        }
-
-        public BigDecimal getMontantHT() {
-            return montantHT;
-        }
-
-        public void setMontantHT(BigDecimal montantHT) {
-            this.montantHT = montantHT;
-        }
-
-        public String getDetail() {
-            return detail;
-        }
-
-        public void setDetail(String detail) {
-            this.detail = detail;
-        }
-
-        @Override
-        public String toString() {
-            return "LigneFactureForm{" +
-                "quantite=" + quantite +
-                ", montantHT=" + montantHT +
-                ", detail='" + detail + '\'' +
-                '}';
-        }
-    }
-
 }

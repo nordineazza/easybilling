@@ -2,14 +2,13 @@ package fr.easybilling.web.rest;
 
 import fr.easybilling.domain.Entreprise;
 import fr.easybilling.domain.Facture;
-import fr.easybilling.domain.LigneFacture;
-import fr.easybilling.domain.Tiers;
 import fr.easybilling.service.EntrepriseService;
 import fr.easybilling.service.FactureService;
 import fr.easybilling.service.dto.FactureDTO;
 import fr.easybilling.web.rest.errors.BadRequestAlertException;
-
-import fr.easybilling.web.rest.forms.FactureForm;
+import fr.easybilling.web.rest.form.FactureForm;
+import fr.easybilling.web.rest.mapper.FactureMapper;
+import fr.easybilling.web.rest.response.FactureUpdateResponse;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -25,11 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
-import static fr.easybilling.web.rest.FactureStatusEnum.*;
 
 /**
  * REST controller for managing {@link fr.easybilling.domain.Facture}.
@@ -47,11 +43,14 @@ public class FactureResource {
 
     private final FactureService factureService;
     private final EntrepriseService entrepriseService;
+    private final FactureMapper factureMapper;
 
     public FactureResource(FactureService factureService,
-                           EntrepriseService entrepriseService) {
+                           EntrepriseService entrepriseService,
+                           FactureMapper factureMapper) {
         this.factureService = factureService;
         this.entrepriseService = entrepriseService;
+        this.factureMapper = factureMapper;
     }
 
     /**
@@ -64,35 +63,9 @@ public class FactureResource {
     public ResponseEntity<Facture> createFacture(@RequestBody FactureForm form) throws URISyntaxException {
         log.debug("REST request to save Facture : {}", form);
 
-        Facture facture = new Facture();
-        facture.setId(form.getId());
-        facture.setCreationDate(LocalDate.now());
-        facture.setStatus(EN_COURS.getStatus());
-        facture.setTva(form.getTva());
-        facture.setEcheanceDate(form.getEcheance());
-
-        Tiers tiers = new Tiers();
-        tiers.setRaisonSociale(form.getRaisonSociale());
-        tiers.setAdr1(form.getAdr1());
-        tiers.setAdr2(form.getAdr2());
-        tiers.setAdr3(form.getAdr3());
-        tiers.setCodePostal(form.getCodePostal());
-        tiers.setVille(form.getVille());
-        tiers.setEmail(form.getEmail());
-        tiers.setInscrit(false);
-
-        facture.setDestinataire(tiers);
         Optional<Entreprise> entreprise = entrepriseService.findOne(1L);
+        Facture facture = factureMapper.mapFormToFactureForCreation(form, entreprise);
 
-        facture.setEntreprise(entreprise.get());
-
-        for (FactureForm.LigneFactureForm ligneFactureForm : form.getLignesFacture()) {
-            LigneFacture ligneFacture = new LigneFacture();
-            ligneFacture.setIntitule(ligneFactureForm.getDetail());
-            ligneFacture.setQuantite(ligneFactureForm.getQuantite());
-            ligneFacture.setPrixHt(ligneFactureForm.getMontantHT());
-            facture.addLignes(ligneFacture);
-        }
         Facture result = factureService.save(facture);
         return ResponseEntity.created(new URI("/api/factures/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -102,29 +75,24 @@ public class FactureResource {
     /**
      * {@code PUT  /factures} : Updates an existing facture.
      *
-     * @param facture the facture to update.
+     * @param factureForm the facture to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated facture,
      * or with status {@code 400 (Bad Request)} if the facture is not valid,
      * or with status {@code 500 (Internal Server Error)} if the facture couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/factures")
-    public ResponseEntity<Facture> updateFacture(@RequestBody FactureForm factureForm) throws URISyntaxException {
+    public ResponseEntity<Void> updateFacture(@RequestBody FactureForm factureForm) {
+        log.debug("REST request to update Facture : {}", factureForm);
+
         if (factureForm.getId() == 0) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        return createFacture(factureForm);
-    }
+        Optional<Entreprise> entreprise = entrepriseService.findOne(1L);
+        //Optional<Facture> factureDb = factureService.findOne(factureForm.getId());
+        Facture factureUpdated = factureMapper.mapFormToFactureForUpdate(factureForm, entreprise);
+        factureService.save(factureUpdated);
 
-    /**
-     * {@code GET  /factures} : get all the factures.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of factures in body.
-     */
-    @GetMapping("/factures")
-    public List<Facture> getAllFactures() {
-        log.debug("REST request to get all Factures");
-        return factureService.findAll();
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -134,35 +102,19 @@ public class FactureResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the facture, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/factures/{id}")
-    public ResponseEntity<FactureForm> getFacture(@PathVariable Long id) {
-        log.debug("REST request to get Facture : {}", id);
+    public ResponseEntity<FactureUpdateResponse> getFacture(@PathVariable Long id) {
         Optional<Facture> optionalFacture = factureService.findOne(id);
-        FactureForm factureForm = new FactureForm();
-        if (optionalFacture.isPresent()) {
-            Facture facture = optionalFacture.get();
-            Tiers clientFacture = facture.getDestinataire();
-
-            factureForm.setAdr1(clientFacture.getAdr1());
-            factureForm.setAdr2(clientFacture.getAdr2());
-            factureForm.setAdr3(clientFacture.getAdr3());
-            factureForm.setRaisonSociale(clientFacture.getRaisonSociale());
-            factureForm.setVille(clientFacture.getVille());
-            factureForm.setCodePostal(clientFacture.getCodePostal());
-            factureForm.setEmail(clientFacture.getEmail());
-            factureForm.setTva(facture.getTva());
-            factureForm.setEcheance(facture.getEcheanceDate());
-
-            for (LigneFacture ligneFacture : facture.getLignes()) {
-                FactureForm.LigneFactureForm ligneForm = new FactureForm.LigneFactureForm();
-                ligneForm.setDetail(ligneFacture.getIntitule());
-                ligneForm.setMontantHT(ligneFacture.getPrixHt());
-                ligneForm.setQuantite(ligneFacture.getQuantite());
-
-                factureForm.getLignesFacture().add(ligneForm);
-            }
-
+        if (isFactureDoesNotExist(optionalFacture)) {
+            throw new FactureNotFoundException();
         }
-        return ResponseEntity.ok(factureForm);
+
+        FactureUpdateResponse facture = factureMapper.mapFactureToResponse(optionalFacture.get());
+
+        return ResponseEntity.ok(facture);
+    }
+
+    private boolean isFactureDoesNotExist(Optional<Facture> optionalFacture) {
+        return !optionalFacture.isPresent();
     }
 
     /**
@@ -173,17 +125,15 @@ public class FactureResource {
      */
     @DeleteMapping("/factures/{id}")
     public ResponseEntity<Void> deleteFacture(@PathVariable Long id) {
-        log.debug("REST request to delete Facture : {}", id);
         factureService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
-    @PostMapping("/factures/dto")
+    @PostMapping("/factures/display-for-datatable")
     public ResponseEntity<List<FactureDTO>> getFacture() {
         Optional<List<FactureDTO>> facture = Optional.ofNullable(factureService.findFacturesByEntreprise());
         return ResponseUtil.wrapOrNotFound(facture);
     }
-
 
     @GetMapping(value = "/factures/{id}/pdf")
     public ResponseEntity<Resource> getFacturePdf(@PathVariable long id) {
