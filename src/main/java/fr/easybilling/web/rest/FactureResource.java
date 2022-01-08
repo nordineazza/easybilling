@@ -63,8 +63,10 @@ public class FactureResource {
     public ResponseEntity<Facture> createFacture(@RequestBody FactureForm form) throws URISyntaxException {
         log.debug("REST request to save Facture : {}", form);
 
+        Facture facture = factureMapper.mapFormToFactureForCreation(form);
+
         Optional<Entreprise> entreprise = entrepriseService.findOne(1L);
-        Facture facture = factureMapper.mapFormToFactureForCreation(form, entreprise);
+        entreprise.ifPresent(facture::setEntreprise);
 
         Facture result = factureService.save(facture);
         return ResponseEntity.created(new URI("/api/factures/" + result.getId()))
@@ -84,12 +86,17 @@ public class FactureResource {
     public ResponseEntity<Void> updateFacture(@RequestBody FactureForm factureForm) {
         log.debug("REST request to update Facture : {}", factureForm);
 
-        if (factureForm.getId() == 0) {
+        long idFacture = factureForm.getId();
+
+        if (idFacture == 0) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Optional<Entreprise> entreprise = entrepriseService.findOne(1L);
-        //Optional<Facture> factureDb = factureService.findOne(factureForm.getId());
-        Facture factureUpdated = factureMapper.mapFormToFactureForUpdate(factureForm, entreprise);
+        // Suppression des lignes de facture associées
+        factureService.deleteLignesByIdFacture(idFacture);
+
+        // Mise à jour de la facture
+        Optional<Facture> factureDb = factureService.findOne(idFacture);
+        Facture factureUpdated = factureMapper.mapFormToFactureForUpdate(factureForm, factureDb);
         factureService.save(factureUpdated);
 
         return ResponseEntity.noContent().build();

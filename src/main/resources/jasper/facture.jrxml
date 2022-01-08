@@ -4,29 +4,29 @@
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
     <style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
         <box>
-            <pen lineWidth="0.5" lineColor="#000000"/>
-            <topPen lineWidth="0.5" lineColor="#000000"/>
-            <leftPen lineWidth="0.5" lineColor="#000000"/>
-            <bottomPen lineWidth="0.5" lineColor="#000000"/>
-            <rightPen lineWidth="0.5" lineColor="#000000"/>
+            <pen lineWidth="0.0" lineColor="#000000"/>
+            <topPen lineWidth="0.0" lineColor="#000000"/>
+            <leftPen lineWidth="0.0" lineColor="#000000"/>
+            <bottomPen lineWidth="0.0" lineColor="#000000"/>
+            <rightPen lineWidth="0.0" lineColor="#000000"/>
         </box>
     </style>
-    <style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+    <style name="Table_CH" mode="Opaque" backcolor="#BFC9CA">
         <box>
-            <pen lineWidth="0.5" lineColor="#000000"/>
-            <topPen lineWidth="0.5" lineColor="#000000"/>
-            <leftPen lineWidth="0.5" lineColor="#000000"/>
-            <bottomPen lineWidth="0.5" lineColor="#000000"/>
-            <rightPen lineWidth="0.5" lineColor="#000000"/>
+            <pen lineWidth="0.0" lineColor="#000000"/>
+            <topPen lineWidth="0.0" lineColor="#000000"/>
+            <leftPen lineWidth="0.0" lineColor="#000000"/>
+            <bottomPen lineWidth="0.0" lineColor="#000000"/>
+            <rightPen lineWidth="0.0" lineColor="#000000"/>
         </box>
     </style>
     <style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
         <box>
-            <pen lineWidth="0.5" lineColor="#000000"/>
-            <topPen lineWidth="0.5" lineColor="#000000"/>
-            <leftPen lineWidth="0.5" lineColor="#000000"/>
-            <bottomPen lineWidth="0.5" lineColor="#000000"/>
-            <rightPen lineWidth="0.5" lineColor="#000000"/>
+            <pen lineWidth="0.0" lineColor="#000000"/>
+            <topPen lineWidth="0.0" lineColor="#000000"/>
+            <leftPen lineWidth="0.0" lineColor="#000000"/>
+            <bottomPen lineWidth="0.0" lineColor="#000000"/>
+            <rightPen lineWidth="0.0" lineColor="#000000"/>
         </box>
     </style>
     <subDataset name="LigneFactureDataSet" uuid="5c06c9d7-d36b-4211-8933-2e4bb7170d14">
@@ -46,17 +46,20 @@
     <field name="entreprise" class="fr.easybilling.domain.Entreprise"/>
     <field name="lignes" class="java.util.Set"/>
     <field name="tva" class="java.math.BigDecimal"/>
+    <field name="prixTotalHT" class="java.math.BigDecimal"/>
+    <field name="prixTotalTTC" class="java.math.BigDecimal"/>
     <background>
         <band splitType="Stretch"/>
     </background>
     <title>
-        <band height="800" splitType="Stretch">
+        <band height="249" splitType="Stretch">
             <textField>
-                <reportElement x="9" y="8" width="220" height="15" uuid="3e0a05cf-fb50-43a0-a5dd-d841b09ad798">
+                <reportElement x="6" y="0" width="220" height="23" uuid="3e0a05cf-fb50-43a0-a5dd-d841b09ad798">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
-                <textElement>
-                    <font size="11" isBold="true"/>
+                <textElement markup="html">
+                    <font size="13" isBold="true"/>
+                    <paragraph lineSpacingSize="0.0"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{entreprise}.getTiers().getRaisonSociale()]]></textFieldExpression>
             </textField>
@@ -82,7 +85,7 @@
                 <reportElement x="9" y="68" width="411" height="15" uuid="6cdd8e37-b44c-427a-bd3a-9bf8d549e62c">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
-                <textFieldExpression><![CDATA[$F{entreprise}.getTiers().getCodePostale() + " " + $F{entreprise}.getTiers().getVille()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{entreprise}.getTiers().getCodePostal() + " " + $F{entreprise}.getTiers().getVille()]]></textFieldExpression>
             </textField>
             <textField isBlankWhenNull="true">
                 <reportElement x="9" y="83" width="220" height="15" isRemoveLineWhenBlank="true" uuid="f41f7ae5-c60e-419b-a853-2a0c65d74f14">
@@ -91,11 +94,11 @@
                 <textFieldExpression><![CDATA[$F{entreprise}.getTiers().getEmail()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="379" y="98" width="178" height="15" uuid="fc9ddb75-38df-4067-a4c1-039fd1237238">
+                <reportElement x="377" y="90" width="178" height="23" uuid="fc9ddb75-38df-4067-a4c1-039fd1237238">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement>
-                    <font size="11" isBold="true"/>
+                    <font size="13" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{destinataire}.getRaisonSociale()]]></textFieldExpression>
             </textField>
@@ -121,7 +124,7 @@
                 <reportElement x="379" y="158" width="178" height="15" uuid="bd97d00c-05b4-474d-859d-f8a8fbcbc164">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
-                <textFieldExpression><![CDATA[$F{destinataire}.getCodePostale() + " " + $F{destinataire}.getVille()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{destinataire}.getCodePostal() + " " + $F{destinataire}.getVille()]]></textFieldExpression>
             </textField>
             <textField isBlankWhenNull="true">
                 <reportElement x="379" y="173" width="178" height="15" isRemoveLineWhenBlank="true" uuid="18c70876-4010-43f6-89ea-6075a3f62689">
@@ -130,22 +133,27 @@
                 <textFieldExpression><![CDATA[$F{destinataire}.getEmail()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="10" y="212" width="534" height="30" uuid="5f7941e9-1537-43d4-b6b8-cd3ed04fe363">
+                <reportElement x="16" y="222" width="170" height="26" uuid="5f7941e9-1537-43d4-b6b8-cd3ed04fe363">
                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="pixel"/>
                 </reportElement>
                 <box>
-                    <topPen lineWidth="0.25"/>
-                    <leftPen lineWidth="0.25"/>
-                    <bottomPen lineWidth="0.25"/>
-                    <rightPen lineWidth="0.25"/>
+                    <pen lineWidth="0.0"/>
+                    <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
-                <textElement textAlignment="Center">
+                <textElement textAlignment="Left">
                     <font size="12" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA["FACTURE N°" + $F{id}]]></textFieldExpression>
             </textField>
+        </band>
+    </title>
+    <detail>
+        <band height="105">
             <componentElement>
-                <reportElement style="Table_TH" x="12" y="251" width="530" height="79" uuid="50e6ec26-f290-4da3-9c47-bf8058c05c57">
+                <reportElement style="Table_TH" x="16" y="10" width="522" height="79" uuid="50e6ec26-f290-4da3-9c47-bf8058c05c57">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
                     <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -160,9 +168,11 @@
                             <staticText>
                                 <reportElement x="0" y="0" width="320" height="30" uuid="99ed2508-c2d8-4b50-b804-03a32a6a1a85">
                                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+                                    <property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
                                 </reportElement>
                                 <textElement>
-                                    <paragraph firstLineIndent="5"/>
+                                    <font isBold="true"/>
+                                    <paragraph firstLineIndent="5" spacingBefore="8"/>
                                 </textElement>
                                 <text><![CDATA[Libellé]]></text>
                             </staticText>
@@ -173,7 +183,7 @@
                                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
                                 </reportElement>
                                 <textElement>
-                                    <paragraph firstLineIndent="5"/>
+                                    <paragraph firstLineIndent="5" spacingBefore="8"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{intitule}]]></textFieldExpression>
                             </textField>
@@ -186,7 +196,8 @@
                                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
                                 </reportElement>
                                 <textElement>
-                                    <paragraph firstLineIndent="5"/>
+                                    <font isBold="true"/>
+                                    <paragraph firstLineIndent="5" spacingBefore="8"/>
                                 </textElement>
                                 <text><![CDATA[Quantité]]></text>
                             </staticText>
@@ -197,29 +208,30 @@
                                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
                                 </reportElement>
                                 <textElement>
-                                    <paragraph firstLineIndent="5"/>
+                                    <paragraph firstLineIndent="5" spacingBefore="8"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{quantite}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="110" uuid="01f9bb66-b275-4c58-8333-78db48fe0be2">
+                    <jr:column width="112" uuid="01f9bb66-b275-4c58-8333-78db48fe0be2">
                         <jr:columnHeader style="Table_CH" height="30">
                             <staticText>
-                                <reportElement x="0" y="0" width="110" height="30" uuid="b790cf0b-9f2b-4697-9457-9c9c4e8d6488"/>
+                                <reportElement x="0" y="0" width="112" height="30" uuid="b790cf0b-9f2b-4697-9457-9c9c4e8d6488"/>
                                 <textElement>
-                                    <paragraph firstLineIndent="5"/>
+                                    <font isBold="true"/>
+                                    <paragraph firstLineIndent="5" spacingBefore="8"/>
                                 </textElement>
                                 <text><![CDATA[Prix HT]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField pattern="#,##0.##¤;#,##0.##- ¤">
-                                <reportElement x="0" y="0" width="110" height="30" uuid="65c8baff-96db-41cd-a94e-87b276db1be6">
+                                <reportElement x="0" y="0" width="112" height="30" uuid="65c8baff-96db-41cd-a94e-87b276db1be6">
                                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
                                 </reportElement>
                                 <textElement>
-                                    <paragraph firstLineIndent="5"/>
+                                    <paragraph firstLineIndent="5" spacingBefore="8"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{prixHt}]]></textFieldExpression>
                             </textField>
@@ -227,8 +239,10 @@
                     </jr:column>
                 </jr:table>
             </componentElement>
+        </band>
+        <band height="89">
             <frame>
-                <reportElement x="394" y="340" width="148" height="80" isPrintInFirstWholeBand="true" uuid="9024816b-22d2-4c74-8ef9-d6fd8bb6466d"/>
+                <reportElement x="392" y="4" width="146" height="76" isPrintInFirstWholeBand="true" uuid="9024816b-22d2-4c74-8ef9-d6fd8bb6466d"/>
                 <box>
                     <topPen lineWidth="0.25"/>
                     <leftPen lineWidth="0.25"/>
@@ -236,22 +250,41 @@
                     <rightPen lineWidth="0.25"/>
                 </box>
                 <textField>
-                    <reportElement x="7" y="10" width="100" height="20" uuid="00531fde-ca09-4180-9668-b6c283a70ab6"/>
+                    <reportElement x="7" y="10" width="63" height="20" uuid="00531fde-ca09-4180-9668-b6c283a70ab6"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
                     <textFieldExpression><![CDATA["Total H.T : "]]></textFieldExpression>
                 </textField>
                 <textField>
-                    <reportElement x="7" y="31" width="43" height="20" uuid="d09abbe1-35dd-4679-89bb-cc88c90b4c26"/>
-                    <textFieldExpression><![CDATA["TVA : "]]></textFieldExpression>
+                    <reportElement x="7" y="31" width="63" height="20" uuid="d09abbe1-35dd-4679-89bb-cc88c90b4c26"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA["        TVA : "]]></textFieldExpression>
                 </textField>
                 <textField>
-                    <reportElement x="7" y="52" width="100" height="20" uuid="c93b3411-8e6b-40e1-94a5-8c00c78646f4"/>
-                    <textFieldExpression><![CDATA["Total TTC : " ]]></textFieldExpression>
+                    <reportElement x="7" y="52" width="63" height="20" uuid="c93b3411-8e6b-40e1-94a5-8c00c78646f4">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA["Total TTC : "]]></textFieldExpression>
                 </textField>
                 <textField pattern="#,##0.##%">
-                    <reportElement x="50" y="31" width="43" height="20" uuid="6bcd316f-d8be-4fb0-8544-58a94d528d3f"/>
+                    <reportElement x="64" y="31" width="52" height="20" uuid="6bcd316f-d8be-4fb0-8544-58a94d528d3f"/>
                     <textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
+                </textField>
+                <textField pattern="#,##0.##¤;#,##0.##- ¤">
+                    <reportElement x="64" y="10" width="52" height="20" uuid="b5acbf70-db4e-428b-86f6-7699212c584b"/>
+                    <textFieldExpression><![CDATA[$F{prixTotalHT}]]></textFieldExpression>
+                </textField>
+                <textField pattern="#,##0.##¤;#,##0.##- ¤">
+                    <reportElement x="64" y="52" width="58" height="20" uuid="74ccd25c-9b53-4b14-b344-572fb5668386"/>
+                    <textFieldExpression><![CDATA[$F{prixTotalTTC}]]></textFieldExpression>
                 </textField>
             </frame>
         </band>
-    </title>
+    </detail>
 </jasperReport>

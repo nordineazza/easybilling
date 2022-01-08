@@ -1,6 +1,8 @@
 package fr.easybilling.service.impl;
 
 import fr.easybilling.domain.Facture;
+import fr.easybilling.domain.LigneFacture;
+import fr.easybilling.repository.LigneFactureRepository;
 import fr.easybilling.service.dto.FactureDTO;
 import fr.easybilling.repository.FactureRepository;
 import fr.easybilling.service.FactureService;
@@ -15,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service Implementation for managing {@link Facture}.
@@ -30,9 +29,11 @@ public class FactureServiceImpl implements FactureService {
     private final Logger log = LoggerFactory.getLogger(FactureServiceImpl.class);
 
     private final FactureRepository factureRepository;
+    private final LigneFactureRepository ligneFactureRepository;
 
-    public FactureServiceImpl(FactureRepository factureRepository) {
+    public FactureServiceImpl(FactureRepository factureRepository, LigneFactureRepository ligneFactureRepository) {
         this.factureRepository = factureRepository;
+        this.ligneFactureRepository = ligneFactureRepository;
     }
 
     @Override
@@ -48,7 +49,6 @@ public class FactureServiceImpl implements FactureService {
         return factureRepository.findAll();
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public Optional<Facture> findOne(Long id) {
@@ -62,14 +62,33 @@ public class FactureServiceImpl implements FactureService {
         factureRepository.deleteById(id);
     }
 
+    //@todo méthode non cohérente
     @Override
     public List<FactureDTO> findFacturesByEntreprise() {
         return factureRepository.findFacturesByEntreprise();
     }
 
     @Override
+    public void deleteLignesByIdFacture(long idFacture) {
+        Optional<Facture> optionalFacture = findOne(idFacture);
+        if (optionalFacture.isPresent()) {
+            Iterable<LigneFacture> iterable = optionalFacture.get().getLignes();
+            ligneFactureRepository.deleteInBatch(iterable);
+        }
+    }
+
+    @Override
     public FactureDTO findFactureById(long id) {
         return factureRepository.findFactureById(id);
+    }
+
+    @Override
+    public ByteArrayOutputStream generateFactureWithJasper(long idFacture) {
+        Optional<Facture> optFacture = findOne(idFacture);
+
+        return optFacture
+            .map(this::generateFactureWithJasper)
+            .orElseThrow(() -> new NullPointerException("la facture n'existe pas"));
     }
 
     private ByteArrayOutputStream generateFactureWithJasper(Facture facture) {
@@ -92,15 +111,6 @@ public class FactureServiceImpl implements FactureService {
         }
 
         return new ByteArrayOutputStream(0);
-    }
-
-    @Override
-    public ByteArrayOutputStream generateFactureWithJasper(long idFacture) {
-        Optional<Facture> optFacture = findOne(idFacture);
-
-        return optFacture
-            .map(this::generateFactureWithJasper)
-            .orElseThrow(() -> new NullPointerException("la facture n'existe pas"));
     }
 
 }

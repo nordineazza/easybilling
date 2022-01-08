@@ -32,8 +32,8 @@ public class FactureMapper {
         objectMapper.configure(WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
-    public Facture mapFormToFactureForCreation(FactureForm form, Optional<Entreprise> entreprise) {
-        Facture facture = mapCommonElementForCreationAndUpdate(form, entreprise);
+    public Facture mapFormToFactureForCreation(FactureForm form) {
+        Facture facture = mapCommonElementForCreationAndUpdate(form);
         facture.setCreationDate(LocalDate.now());
         facture.setStatus(EN_COURS.getStatus());
         facture.getDestinataire().setInscrit(false);
@@ -41,16 +41,25 @@ public class FactureMapper {
         return facture;
     }
 
-    public Facture mapFormToFactureForUpdate(FactureForm form, Optional<Entreprise> entreprise) {
-        return mapCommonElementForCreationAndUpdate(form, entreprise);
+    public Facture mapFormToFactureForUpdate(FactureForm form,
+                                             Optional<Facture> optionalFactureDB) {
+        Facture facture = mapCommonElementForCreationAndUpdate(form);
+        if (optionalFactureDB.isPresent()) {
+            Facture factureDB = optionalFactureDB.get();
+            facture.getDestinataire().setId(factureDB.getDestinataire().getId());
+            facture.getDestinataire().setPays(factureDB.getDestinataire().getPays());
+            facture.getDestinataire().setInscrit(factureDB.getDestinataire().isInscrit());
+            facture.setCreationDate(factureDB.getCreationDate());
+            facture.setStatus(factureDB.getStatus());
+            facture.setEntreprise(factureDB.getEntreprise());
+        }
+        return facture;
     }
 
-    private Facture mapCommonElementForCreationAndUpdate(FactureForm form, Optional<Entreprise> entreprise) {
+    private Facture mapCommonElementForCreationAndUpdate(FactureForm form) {
         Facture facture = objectMapper.convertValue(form, Facture.class);
         Tiers tiers = objectMapper.convertValue(form, Tiers.class);
         facture.setDestinataire(tiers);
-
-        entreprise.ifPresent(facture::setEntreprise);
 
         form.getLignesFacture().forEach(ligne
             -> facture.addLignes(objectMapper.convertValue(ligne, LigneFacture.class))

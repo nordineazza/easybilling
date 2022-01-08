@@ -63,4 +63,10 @@ public interface FactureService {
      * @return
      */
     ByteArrayOutputStream generateFactureWithJasper(long idFacture);
-}
+
+    /**
+     * Delete lignes associated with facture
+     * @param idFacture
+     */
+    void deleteLignesByIdFacture(long idFacture);
+    }
