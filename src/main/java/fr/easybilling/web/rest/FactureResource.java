@@ -6,11 +6,13 @@ import fr.easybilling.service.EntrepriseService;
 import fr.easybilling.service.FactureService;
 import fr.easybilling.service.dto.FactureDTO;
 import fr.easybilling.web.rest.errors.BadRequestAlertException;
+import fr.easybilling.web.rest.exception.FactureNotFoundException;
 import fr.easybilling.web.rest.form.FactureForm;
 import fr.easybilling.web.rest.mapper.FactureMapper;
 import fr.easybilling.web.rest.response.FactureUpdateResponse;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,8 +78,13 @@ public class FactureResource {
 
         Facture facture = factureMapper.mapFormToFactureForCreation(form);
 
-        Optional<Entreprise> entreprise = entrepriseService.findOne(1L);
-        entreprise.ifPresent(facture::setEntreprise);
+        List<Entreprise> entreprises = entrepriseService.getEntreprisesOfCurrentUser();
+        if (CollectionUtils.isNotEmpty(entreprises)) {
+            facture.setEntreprise(entreprises.get(0));
+        } else {
+            log.error("entreprise does not exist");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
         Facture result = factureService.save(facture);
         return ResponseEntity.created(new URI("/api/factures/" + result.getId()))
@@ -149,7 +156,12 @@ public class FactureResource {
 
     @PostMapping("/factures/display-for-datatable")
     public ResponseEntity<List<FactureDTO>> getFacture() {
-        Optional<List<FactureDTO>> facture = Optional.ofNullable(factureService.findFacturesByEntreprise());
+        List<Entreprise> entreprises = entrepriseService.getEntreprisesOfCurrentUser();
+        long entrepriseId = 0;
+        if (CollectionUtils.isNotEmpty(entreprises)) {
+            entrepriseId = entreprises.get(0).getId();
+        }
+        Optional<List<FactureDTO>> facture = Optional.ofNullable(factureService.findFacturesByEntrepriseId(entrepriseId));
         return ResponseUtil.wrapOrNotFound(facture);
     }
 

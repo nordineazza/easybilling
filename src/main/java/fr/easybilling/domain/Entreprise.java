@@ -1,5 +1,6 @@
 package fr.easybilling.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -28,6 +29,10 @@ public class Entreprise implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private Tiers tiers;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "entreprises", allowSetters = true)
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -62,6 +67,19 @@ public class Entreprise implements Serializable {
 
     public void setTiers(Tiers tiers) {
         this.tiers = tiers;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Entreprise user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

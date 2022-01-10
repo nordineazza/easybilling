@@ -33,6 +33,10 @@ relationship OneToOne {
 	Entreprise{tiers} to Tiers
 }
 
+relationship ManyToOne {
+	Entreprise{user} to User
+}
+
 entity Tiers {
     raisonSociale String
     adr1 String

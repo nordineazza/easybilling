@@ -44,10 +44,10 @@ public interface FactureService {
     void delete(Long id);
 
     /**
-     * Get list of factures
-     * @return
+     * Get list of factures by entreprise id
+     * @return a list of factures
      */
-    List<FactureDTO> findFacturesByEntreprise();
+    List<FactureDTO> findFacturesByEntrepriseId(long entrepriseId);
 
     /**
      * Get facture by id

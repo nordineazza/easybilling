@@ -62,10 +62,9 @@ public class FactureServiceImpl implements FactureService {
         factureRepository.deleteById(id);
     }
 
-    //@todo méthode non cohérente
     @Override
-    public List<FactureDTO> findFacturesByEntreprise() {
-        return factureRepository.findFacturesByEntreprise();
+    public List<FactureDTO> findFacturesByEntrepriseId(long entrepriseId) {
+        return factureRepository.findFacturesByEntrepriseId(entrepriseId);
     }
 
     @Override

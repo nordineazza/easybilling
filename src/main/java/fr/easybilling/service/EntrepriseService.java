@@ -40,4 +40,11 @@ public interface EntrepriseService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Entreprise(s) of current user
+     * @return a list of entreprise of current user
+     */
+    List<Entreprise> getEntreprisesOfCurrentUser();
+
 }

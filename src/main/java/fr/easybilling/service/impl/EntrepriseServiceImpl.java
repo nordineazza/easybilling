@@ -53,4 +53,9 @@ public class EntrepriseServiceImpl implements EntrepriseService {
         log.debug("Request to delete Entreprise : {}", id);
         entrepriseRepository.deleteById(id);
     }
+
+    @Override
+    public List<Entreprise> getEntreprisesOfCurrentUser() {
+        return entrepriseRepository.findByUserIsCurrentUser();
+    }
 }

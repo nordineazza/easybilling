@@ -54,7 +54,7 @@
     <title>
         <band height="249" splitType="Stretch">
             <textField>
-                <reportElement x="6" y="0" width="220" height="23" uuid="3e0a05cf-fb50-43a0-a5dd-d841b09ad798">
+                <reportElement x="7" y="0" width="220" height="23" uuid="3e0a05cf-fb50-43a0-a5dd-d841b09ad798">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement markup="html">
@@ -94,7 +94,7 @@
                 <textFieldExpression><![CDATA[$F{entreprise}.getTiers().getEmail()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="377" y="90" width="178" height="23" uuid="fc9ddb75-38df-4067-a4c1-039fd1237238">
+                <reportElement x="378" y="90" width="178" height="23" uuid="fc9ddb75-38df-4067-a4c1-039fd1237238">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement>
@@ -133,7 +133,7 @@
                 <textFieldExpression><![CDATA[$F{destinataire}.getEmail()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="16" y="222" width="170" height="26" uuid="5f7941e9-1537-43d4-b6b8-cd3ed04fe363">
+                <reportElement x="16" y="230" width="170" height="18" uuid="5f7941e9-1537-43d4-b6b8-cd3ed04fe363">
                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="pixel"/>
                 </reportElement>
                 <box>
@@ -151,7 +151,7 @@
         </band>
     </title>
     <detail>
-        <band height="105">
+        <band height="100">
             <componentElement>
                 <reportElement style="Table_TH" x="16" y="10" width="522" height="79" uuid="50e6ec26-f290-4da3-9c47-bf8058c05c57">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
@@ -240,51 +240,48 @@
                 </jr:table>
             </componentElement>
         </band>
-        <band height="89">
+        <band height="169">
             <frame>
-                <reportElement x="392" y="4" width="146" height="76" isPrintInFirstWholeBand="true" uuid="9024816b-22d2-4c74-8ef9-d6fd8bb6466d"/>
+                <reportElement style="Table_TH" x="420" y="4" width="118" height="20" isPrintInFirstWholeBand="true" forecolor="#BFC9CA" backcolor="#BFC9CA" uuid="9024816b-22d2-4c74-8ef9-d6fd8bb6466d">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
                 <box>
-                    <topPen lineWidth="0.25"/>
-                    <leftPen lineWidth="0.25"/>
-                    <bottomPen lineWidth="0.25"/>
-                    <rightPen lineWidth="0.25"/>
+                    <topPen lineWidth="0.0"/>
+                    <leftPen lineWidth="0.0"/>
+                    <bottomPen lineWidth="0.0"/>
+                    <rightPen lineWidth="0.0"/>
                 </box>
-                <textField>
-                    <reportElement x="7" y="10" width="63" height="20" uuid="00531fde-ca09-4180-9668-b6c283a70ab6"/>
-                    <textElement>
-                        <font isBold="true"/>
-                    </textElement>
-                    <textFieldExpression><![CDATA["Total H.T : "]]></textFieldExpression>
-                </textField>
-                <textField>
-                    <reportElement x="7" y="31" width="63" height="20" uuid="d09abbe1-35dd-4679-89bb-cc88c90b4c26"/>
-                    <textElement>
-                        <font isBold="true"/>
-                    </textElement>
-                    <textFieldExpression><![CDATA["        TVA : "]]></textFieldExpression>
-                </textField>
-                <textField>
-                    <reportElement x="7" y="52" width="63" height="20" uuid="c93b3411-8e6b-40e1-94a5-8c00c78646f4">
-                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
-                    </reportElement>
-                    <textElement>
-                        <font isBold="true"/>
-                    </textElement>
-                    <textFieldExpression><![CDATA["Total TTC : "]]></textFieldExpression>
-                </textField>
-                <textField pattern="#,##0.##%">
-                    <reportElement x="64" y="31" width="52" height="20" uuid="6bcd316f-d8be-4fb0-8544-58a94d528d3f"/>
-                    <textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
-                </textField>
-                <textField pattern="#,##0.##¤;#,##0.##- ¤">
-                    <reportElement x="64" y="10" width="52" height="20" uuid="b5acbf70-db4e-428b-86f6-7699212c584b"/>
-                    <textFieldExpression><![CDATA[$F{prixTotalHT}]]></textFieldExpression>
-                </textField>
-                <textField pattern="#,##0.##¤;#,##0.##- ¤">
-                    <reportElement x="64" y="52" width="58" height="20" uuid="74ccd25c-9b53-4b14-b344-572fb5668386"/>
-                    <textFieldExpression><![CDATA[$F{prixTotalTTC}]]></textFieldExpression>
-                </textField>
+                <staticText>
+                    <reportElement x="3" y="4" width="100" height="14" uuid="fb141685-78eb-43da-9a1b-ee6b05f8b0ac"/>
+                    <text><![CDATA[Total H.T]]></text>
+                </staticText>
             </frame>
+            <frame>
+                <reportElement style="Table_CH" x="420" y="46" width="118" height="20" uuid="8c7e6c86-4d37-470a-816a-57fc7e3e5d85"/>
+                <staticText>
+                    <reportElement x="3" y="4" width="100" height="14" uuid="b3649e4d-18fd-4a95-a762-464b392effcf"/>
+                    <text><![CDATA[TVA]]></text>
+                </staticText>
+            </frame>
+            <frame>
+                <reportElement style="Table_CH" x="420" y="88" width="118" height="20" uuid="68e4dffb-671a-4775-99a0-3fd2f27d05e2"/>
+                <staticText>
+                    <reportElement x="3" y="4" width="100" height="14" uuid="dc69d36c-0b8f-4cb5-893f-01ea7df65c23"/>
+                    <text><![CDATA[Total TTC]]></text>
+                </staticText>
+            </frame>
+            <textField pattern="#,##0.##¤;#,##0.##- ¤">
+                <reportElement x="424" y="29" width="102" height="14" uuid="b5acbf70-db4e-428b-86f6-7699212c584b"/>
+                <textFieldExpression><![CDATA[$F{prixTotalHT}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.##¤;#,##0.##- ¤">
+                <reportElement x="424" y="111" width="100" height="14" uuid="74ccd25c-9b53-4b14-b344-572fb5668386"/>
+                <textFieldExpression><![CDATA[$F{prixTotalTTC}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.##%">
+                <reportElement x="424" y="71" width="100" height="14" uuid="6bcd316f-d8be-4fb0-8544-58a94d528d3f"/>
+                <textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
+            </textField>
         </band>
     </detail>
 </jasperReport>

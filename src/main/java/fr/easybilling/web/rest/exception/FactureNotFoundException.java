@@ -1,4 +1,4 @@
-package fr.easybilling.web.rest;
+package fr.easybilling.web.rest.exception;
 
 public class FactureNotFoundException extends RuntimeException {
 }
