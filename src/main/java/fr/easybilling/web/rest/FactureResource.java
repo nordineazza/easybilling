@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,12 @@ public class FactureResource {
         this.factureMapper = factureMapper;
     }
 
+    @ExceptionHandler(FactureNotFoundException.class)
+    public ResponseEntity<FactureUpdateResponse> handleFactureNotFoundException(Exception e) {
+        log.error("facture not found", e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     /**
      * {@code POST  /factures} : Create a new facture.
      *
@@ -62,6 +69,10 @@ public class FactureResource {
     @PostMapping("/factures")
     public ResponseEntity<Facture> createFacture(@RequestBody FactureForm form) throws URISyntaxException {
         log.debug("REST request to save Facture : {}", form);
+
+        if (form.getId() != 0) {
+            throw new BadRequestAlertException("A new facture cannot already have an ID", ENTITY_NAME, "idexists");
+        }
 
         Facture facture = factureMapper.mapFormToFactureForCreation(form);
 

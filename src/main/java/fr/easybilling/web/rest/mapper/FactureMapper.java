@@ -2,7 +2,6 @@ package fr.easybilling.web.rest.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import fr.easybilling.domain.Entreprise;
 import fr.easybilling.domain.Facture;
 import fr.easybilling.domain.LigneFacture;
 import fr.easybilling.domain.Tiers;
