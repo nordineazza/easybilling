@@ -1,0 +1,54 @@
+{
+  "name": "Facture",
+  "fields": [
+    {
+      "fieldName": "creationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "echeanceDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "tva",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ligneFacture",
+      "otherEntityRelationshipName": "facture",
+      "relationshipName": "lignes"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "tiers",
+      "otherEntityRelationshipName": "facture",
+      "relationshipName": "destinataire",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "entreprise",
+      "otherEntityRelationshipName": "facture",
+      "relationshipName": "entreprise",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201125153841",
+  "entityTableName": "facture",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
