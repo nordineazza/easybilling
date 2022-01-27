@@ -1,13 +1,14 @@
-name: Build
+name: Sonar Analysis
 on:
   push:
     branches:
       - master
+      - EAS-1
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  build:
-    name: Build
+  sonar:
+    name: Sonar Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

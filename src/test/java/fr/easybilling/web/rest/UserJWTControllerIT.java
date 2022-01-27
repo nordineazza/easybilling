@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,7 +50,7 @@ public class UserJWTControllerIT {
         userRepository.saveAndFlush(user);
 
         LoginVM login = new LoginVM();
-        login.setUsername("user-jwt-controller");
+        login.setEmail("user-jwt-controller");
         login.setPassword("test");
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +74,7 @@ public class UserJWTControllerIT {
         userRepository.saveAndFlush(user);
 
         LoginVM login = new LoginVM();
-        login.setUsername("user-jwt-controller-remember-me");
+        login.setEmail("user-jwt-controller-remember-me");
         login.setPassword("test");
         login.setRememberMe(true);
         mockMvc.perform(post("/api/authenticate")
@@ -91,7 +90,7 @@ public class UserJWTControllerIT {
     @Test
     public void testAuthorizeFails() throws Exception {
         LoginVM login = new LoginVM();
-        login.setUsername("wrong-user");
+        login.setEmail("wrong-user");
         login.setPassword("wrong password");
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)

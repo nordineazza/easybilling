@@ -9,6 +9,7 @@ import fr.easybilling.security.AuthoritiesConstants;
 import fr.easybilling.security.SecurityUtils;
 import fr.easybilling.service.dto.UserDTO;
 
+import fr.easybilling.web.rest.form.UserForm;
 import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
@@ -87,41 +88,37 @@ public class UserService {
             });
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new UsernameAlreadyUsedException();
-            }
-        });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+    public User registerUser(UserForm userForm) {
+        userRepository.findOneByEmailIgnoreCase(userForm.getEmail()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new EmailAlreadyUsedException();
             }
         });
         User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
-        // new user gets initially a generated password
-        newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
+        newUser.setLogin(userForm.getFirstName().charAt(0) + userForm.getLastName());
+        newUser.setFirstName(userForm.getFirstName());
+        newUser.setLastName(userForm.getLastName());
+        if (userForm.getEmail() != null) {
+            newUser.setEmail(userForm.getEmail().toLowerCase());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        String encryptedPassword = passwordEncoder.encode(userForm.getPassword());
+        newUser.setPassword(encryptedPassword);
+        // new user gets activation key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setResetDate(Instant.now());
         // new user is not active
         newUser.setActivated(false);
-        // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
+
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
         return newUser;
     }
 

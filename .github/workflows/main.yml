@@ -1,12 +1,14 @@
-name: Deploy
+name: Deploy on Heroku
 on:
   push:
     branches:
       - master
       - module-facture
+      - EAS-1
 
 jobs:
-  build:
+  deploy_on_heroku:
+    needs: sonar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

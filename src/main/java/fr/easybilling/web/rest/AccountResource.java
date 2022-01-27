@@ -8,6 +8,7 @@ import fr.easybilling.service.UserService;
 import fr.easybilling.service.dto.PasswordChangeDTO;
 import fr.easybilling.service.dto.UserDTO;
 import fr.easybilling.web.rest.errors.*;
+import fr.easybilling.web.rest.form.UserForm;
 import fr.easybilling.web.rest.vm.KeyAndPasswordVM;
 import fr.easybilling.web.rest.vm.ManagedUserVM;
 
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,18 +54,18 @@ public class AccountResource {
     /**
      * {@code POST  /register} : register the user.
      *
-     * @param managedUserVM the managed user View Model.
+     * @param userForm the managed user View Model.
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
+    public void registerAccount(@Valid @RequestBody UserForm userForm) {
+        if (!checkPasswordLength(userForm.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        User user = userService.registerUser(userForm);
         mailService.sendActivationEmail(user);
     }
 
@@ -73,12 +75,13 @@ public class AccountResource {
      * @param key the activation key.
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
-    @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
+    @GetMapping(value = "/activate", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
+        return user.get().getEmail();
     }
 
     /**
@@ -145,17 +148,17 @@ public class AccountResource {
     /**
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *
-     * @param mail the mail of the user.
+     * @param email the email of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+    public void requestPasswordReset(@RequestParam String email) {
+        Optional<User> user = userService.requestPasswordReset(email);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
-            log.warn("Password reset requested for non existing mail");
+            log.warn("Password reset requested for non existing email");
         }
     }
 
