@@ -74,8 +74,8 @@ class FactureResourceTest {
     @DisplayName("Should return 204 if done successfully")
     void updateFacture() throws Exception {
         FactureForm form = getFactureForm();
-
-        restFactureMockMvc.perform(put("/api/factures")
+        when(factureService.findOne(anyLong())).thenReturn(Optional.of(getFactureDataSet()));
+        restFactureMockMvc.perform(put("/api/factures/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(form)))
             .andExpect(status().isNoContent());
@@ -83,7 +83,6 @@ class FactureResourceTest {
 
     private FactureForm getFactureForm() {
         FactureForm factureForm = new FactureForm();
-        factureForm.setId(1);
         factureForm.setEcheanceDate(LocalDate.now());
         factureForm.setTva(new BigDecimal("0.20"));
         factureForm.setEmail("test@mail.fr");

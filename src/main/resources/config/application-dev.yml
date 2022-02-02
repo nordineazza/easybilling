@@ -38,8 +38,8 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/EasyBilling?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-    username: root
-    password: root78130
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -54,10 +54,15 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    protocol: smtp
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: ${SMTP_HOST}
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:

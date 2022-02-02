@@ -5,7 +5,6 @@ import fr.easybilling.domain.Facture;
 import fr.easybilling.service.EntrepriseService;
 import fr.easybilling.service.FactureService;
 import fr.easybilling.service.dto.FactureDTO;
-import fr.easybilling.web.rest.errors.BadRequestAlertException;
 import fr.easybilling.web.rest.exception.FactureNotFoundException;
 import fr.easybilling.web.rest.form.FactureForm;
 import fr.easybilling.web.rest.mapper.FactureMapper;
@@ -24,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -72,10 +72,6 @@ public class FactureResource {
     public ResponseEntity<Facture> createFacture(@RequestBody FactureForm form) throws URISyntaxException {
         log.debug("REST request to save Facture : {}", form);
 
-        if (form.getId() != 0) {
-            throw new BadRequestAlertException("A new facture cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-
         Facture facture = factureMapper.mapFormToFactureForCreation(form);
 
         List<Entreprise> entreprises = entrepriseService.getEntreprisesOfCurrentUser();
@@ -95,29 +91,29 @@ public class FactureResource {
     /**
      * {@code PUT  /factures} : Updates an existing facture.
      *
+     * @param id the id of the facture to update.
      * @param factureForm the facture to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated facture,
      * or with status {@code 400 (Bad Request)} if the facture is not valid,
      * or with status {@code 500 (Internal Server Error)} if the facture couldn't be updated.
      */
-    @PutMapping("/factures")
-    public ResponseEntity<Void> updateFacture(@RequestBody FactureForm factureForm) {
+    @PutMapping("/factures/{id}")
+    public ResponseEntity<Void> updateFacture(@PathVariable @Min(1) long id, @RequestBody FactureForm factureForm) {
         log.debug("REST request to update Facture : {}", factureForm);
 
-        long idFacture = factureForm.getId();
-
-        if (idFacture == 0) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        // Suppression des lignes de facture associées
-        factureService.deleteLignesByIdFacture(idFacture);
-
         // Mise à jour de la facture
-        Optional<Facture> factureDb = factureService.findOne(idFacture);
-        Facture factureUpdated = factureMapper.mapFormToFactureForUpdate(factureForm, factureDb);
-        factureService.save(factureUpdated);
+        Optional<Facture> factureDb = factureService.findOne(id);
 
-        return ResponseEntity.noContent().build();
+        if (factureDb.isPresent()) {
+            // Suppression des lignes de facture associées
+            factureService.deleteLignesByIdFacture(id);
+
+            Facture factureUpdated = factureMapper.mapFormToFactureForUpdate(factureForm, factureDb);
+            factureService.save(factureUpdated);
+
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -126,20 +122,30 @@ public class FactureResource {
      * @param id the id of the facture to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the facture, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/factures/{id}")
+    @GetMapping(value = "/factures/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FactureUpdateResponse> getFacture(@PathVariable Long id) {
         Optional<Facture> optionalFacture = factureService.findOne(id);
-        if (isFactureDoesNotExist(optionalFacture)) {
-            throw new FactureNotFoundException();
-        }
 
-        FactureUpdateResponse facture = factureMapper.mapFactureToResponse(optionalFacture.get());
+        Facture facture = optionalFacture.orElseThrow(FactureNotFoundException::new);
 
-        return ResponseEntity.ok(facture);
+        return ResponseEntity.ok(factureMapper.mapFactureToResponse(facture));
     }
 
-    private boolean isFactureDoesNotExist(Optional<Facture> optionalFacture) {
-        return !optionalFacture.isPresent();
+    @GetMapping(value = "/factures/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<Resource> getFacturePdf(@PathVariable long id) {
+
+        ByteArrayOutputStream byteArrayOutputStream = factureService.generateFactureWithJasper(id);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=facture_" + id + ".pdf");
+        header.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
+        header.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        header.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(bytes.length));
+
+        ByteArrayResource resource = new ByteArrayResource(bytes);
+
+        return ResponseEntity.ok().headers(header).body(resource);
     }
 
     /**
@@ -165,20 +171,4 @@ public class FactureResource {
         return ResponseUtil.wrapOrNotFound(facture);
     }
 
-    @GetMapping(value = "/factures/{id}/pdf")
-    public ResponseEntity<Resource> getFacturePdf(@PathVariable long id) {
-
-        ByteArrayOutputStream byteArrayOutputStream = factureService.generateFactureWithJasper(id);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-
-        HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=facture_" + id + ".pdf");
-        header.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-        header.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
-        header.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(bytes.length));
-
-        ByteArrayResource resource = new ByteArrayResource(bytes);
-
-        return ResponseEntity.ok().headers(header).body(resource);
-    }
 }

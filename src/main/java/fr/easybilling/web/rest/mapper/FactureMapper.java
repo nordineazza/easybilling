@@ -34,7 +34,7 @@ public class FactureMapper {
     public Facture mapFormToFactureForCreation(FactureForm form) {
         Facture facture = mapCommonElementForCreationAndUpdate(form);
         facture.setCreationDate(LocalDate.now());
-        facture.setStatus(EN_COURS.getStatus());
+        facture.setStatus(EN_COURS.name());
         facture.getDestinataire().setInscrit(false);
         facture.getDestinataire().setPays("France"); // TODO à retirer au futur pour l'intégrer comme feature
         return facture;
@@ -45,6 +45,7 @@ public class FactureMapper {
         Facture facture = mapCommonElementForCreationAndUpdate(form);
         if (optionalFactureDB.isPresent()) {
             Facture factureDB = optionalFactureDB.get();
+            facture.setId(factureDB.getId());
             facture.getDestinataire().setId(factureDB.getDestinataire().getId());
             facture.getDestinataire().setPays(factureDB.getDestinataire().getPays());
             facture.getDestinataire().setInscrit(factureDB.getDestinataire().isInscrit());

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FactureForm {
-    private long id;
     private String raisonSociale;
     private String adr1;
     private String adr2;
@@ -91,14 +90,6 @@ public class FactureForm {
         this.echeanceDate = echeanceDate;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public List<LigneFactureForm> getLignesFacture() {
         if (this.lignesFacture == null) {
             this.lignesFacture = new ArrayList<>();
@@ -113,8 +104,7 @@ public class FactureForm {
     @Override
     public String toString() {
         return "FactureForm{" +
-            "id=" + id +
-            ", raisonSociale='" + raisonSociale + '\'' +
+            " raisonSociale='" + raisonSociale + '\'' +
             ", adr1='" + adr1 + '\'' +
             ", adr2='" + adr2 + '\'' +
             ", adr3='" + adr3 + '\'' +

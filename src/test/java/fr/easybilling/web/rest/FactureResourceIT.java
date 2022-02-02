@@ -123,7 +123,7 @@ public class FactureResourceIT {
         assertThat(testFacture.getCreationDate()).isEqualTo(LocalDate.now());
         assertThat(testFacture.getEcheanceDate()).isEqualTo(factureForm.getEcheanceDate());
         assertThat(testFacture.getTva()).isEqualTo(factureForm.getTva());
-        assertThat(testFacture.getStatus()).isEqualTo(EN_COURS.getStatus());
+        assertThat(testFacture.getStatus()).isEqualTo(EN_COURS.name());
     }
 
     private FactureForm getFactureForm() {
@@ -151,27 +151,6 @@ public class FactureResourceIT {
         ligne.setPrixHt(new BigDecimal(10450));
         return Collections.singletonList(ligne);
     }
-
-    @Test
-    @Transactional
-    void createFactureWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = factureRepository.findAll().size();
-
-        // Create the Facture with an existing ID
-        FactureForm factureForm = getFactureForm();
-        factureForm.setId(1L);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restFactureMockMvc.perform(post("/api/factures")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(factureForm)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Facture in the database
-        List<Facture> factureList = factureRepository.findAll();
-        assertThat(factureList).hasSize(databaseSizeBeforeCreate);
-    }
-
 
     @Test
     @Transactional
@@ -220,7 +199,7 @@ public class FactureResourceIT {
             .tva(UPDATED_TVA)
             .status(UPDATED_STATUS);
 
-        restFactureMockMvc.perform(put("/api/factures")
+        restFactureMockMvc.perform(put("/api/factures/{id}", facture.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedFacture)))
             .andExpect(status().isNoContent());
@@ -239,10 +218,10 @@ public class FactureResourceIT {
         int databaseSizeBeforeUpdate = factureRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restFactureMockMvc.perform(put("/api/factures")
+        restFactureMockMvc.perform(put("/api/factures/10")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(facture)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
 
         // Validate the Facture in the database
         List<Facture> factureList = factureRepository.findAll();

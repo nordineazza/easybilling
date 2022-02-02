@@ -164,7 +164,9 @@ public class Facture implements Serializable {
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     public BigDecimal getPrixTotalHT() {
-        return this.getLignes().stream().map(LigneFacture::getPrixHt).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return this.getLignes().stream().map(lF ->
+                        lF.getPrixHt().multiply(BigDecimal.valueOf(lF.getQuantite())))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public BigDecimal getPrixTotalTTC() {
