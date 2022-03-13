@@ -1,10 +1,11 @@
 
-  ${AnsiColor.GREEN}      ██╗${AnsiColor.RED} ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗
-  ${AnsiColor.GREEN}      ██║${AnsiColor.RED} ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗
-  ${AnsiColor.GREEN}      ██║${AnsiColor.RED} ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝
-  ${AnsiColor.GREEN}██╗   ██║${AnsiColor.RED} ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║
-  ${AnsiColor.GREEN}╚██████╔╝${AnsiColor.RED} ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗
-  ${AnsiColor.GREEN} ╚═════╝ ${AnsiColor.RED} ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝
+${AnsiColor.BRIGHT_GREEN}  ______                        ${AnsiColor.BRIGHT_RED} ____    _   _   _   _
+${AnsiColor.BRIGHT_GREEN} |  ____|                       ${AnsiColor.BRIGHT_RED}|  _ \  (_) | | | | (_)
+${AnsiColor.BRIGHT_GREEN} | |__      __ _   ___   _   _  ${AnsiColor.BRIGHT_RED}| |_) |  _  | | | |  _   _ __     __ _
+${AnsiColor.BRIGHT_GREEN} |  __|    / _` | / __| | | | | ${AnsiColor.BRIGHT_RED}|  _ <  | | | | | | | | | '_ \   / _` |
+${AnsiColor.BRIGHT_GREEN} | |____  | (_| | \__ \ | |_| | ${AnsiColor.BRIGHT_RED}| |_) | | | | | | | | | | | | | | (_| |
+${AnsiColor.BRIGHT_GREEN} |______|  \__,_| |___/  \__, | ${AnsiColor.BRIGHT_RED}|____/  |_| |_| |_| |_| |_| |_|  \__, |
+${AnsiColor.BRIGHT_GREEN}                          __/ | ${AnsiColor.BRIGHT_RED}                                  __/ |
+${AnsiColor.BRIGHT_GREEN}                         |___/  ${AnsiColor.BRIGHT_RED}                                 |___/
 
-${AnsiColor.BRIGHT_BLUE}:: JHipster 🤓  :: Running Spring Boot ${spring-boot.version} ::
-:: https://www.jhipster.tech ::${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_BLUE} EasyBilling  :: Running Spring Boot ${spring-boot.version} ::

@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link fr.easybilling.domain.LigneFacture}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/ligne-factures")
 @Transactional
 public class LigneFactureResource {
 
@@ -46,14 +46,14 @@ public class LigneFactureResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ligneFacture, or with status {@code 400 (Bad Request)} if the ligneFacture has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/ligne-factures")
+    @PostMapping
     public ResponseEntity<LigneFacture> createLigneFacture(@RequestBody LigneFacture ligneFacture) throws URISyntaxException {
         log.debug("REST request to save LigneFacture : {}", ligneFacture);
         if (ligneFacture.getId() != null) {
             throw new BadRequestAlertException("A new ligneFacture cannot already have an ID", ENTITY_NAME, "idexists");
         }
         LigneFacture result = ligneFactureRepository.save(ligneFacture);
-        return ResponseEntity.created(new URI("/api/ligne-factures/" + result.getId()))
+        return ResponseEntity.created(new URI("/ligne-factures/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -67,7 +67,7 @@ public class LigneFactureResource {
      * or with status {@code 500 (Internal Server Error)} if the ligneFacture couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/ligne-factures")
+    @PutMapping
     public ResponseEntity<LigneFacture> updateLigneFacture(@RequestBody LigneFacture ligneFacture) throws URISyntaxException {
         log.debug("REST request to update LigneFacture : {}", ligneFacture);
         if (ligneFacture.getId() == null) {
@@ -84,7 +84,7 @@ public class LigneFactureResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of ligneFactures in body.
      */
-    @GetMapping("/ligne-factures")
+    @GetMapping
     public List<LigneFacture> getAllLigneFactures() {
         log.debug("REST request to get all LigneFactures");
         return ligneFactureRepository.findAll();
@@ -96,7 +96,7 @@ public class LigneFactureResource {
      * @param id the id of the ligneFacture to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ligneFacture, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/ligne-factures/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<LigneFacture> getLigneFacture(@PathVariable Long id) {
         log.debug("REST request to get LigneFacture : {}", id);
         Optional<LigneFacture> ligneFacture = ligneFactureRepository.findById(id);
@@ -109,7 +109,7 @@ public class LigneFactureResource {
      * @param id the id of the ligneFacture to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/ligne-factures/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLigneFacture(@PathVariable Long id) {
         log.debug("REST request to delete LigneFacture : {}", id);
         ligneFactureRepository.deleteById(id);

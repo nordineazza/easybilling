@@ -19,7 +19,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +29,13 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.MediaType.*;
+
 /**
  * REST controller for managing {@link fr.easybilling.domain.Facture}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/factures")
 public class FactureResource {
 
     private final Logger log = LoggerFactory.getLogger(FactureResource.class);
@@ -68,7 +69,7 @@ public class FactureResource {
      * @param form the facture to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new facture, or with status {@code 400 (Bad Request)} if the facture has already an ID.
      */
-    @PostMapping("/factures")
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Facture> createFacture(@RequestBody FactureForm form) throws URISyntaxException {
         log.debug("REST request to save Facture : {}", form);
 
@@ -83,7 +84,7 @@ public class FactureResource {
         }
 
         Facture result = factureService.save(facture);
-        return ResponseEntity.created(new URI("/api/factures/" + result.getId()))
+        return ResponseEntity.created(new URI("/factures/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -97,7 +98,7 @@ public class FactureResource {
      * or with status {@code 400 (Bad Request)} if the facture is not valid,
      * or with status {@code 500 (Internal Server Error)} if the facture couldn't be updated.
      */
-    @PutMapping("/factures/{id}")
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateFacture(@PathVariable @Min(1) long id, @RequestBody FactureForm factureForm) {
         log.debug("REST request to update Facture : {}", factureForm);
 
@@ -122,7 +123,7 @@ public class FactureResource {
      * @param id the id of the facture to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the facture, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping(value = "/factures/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<FactureUpdateResponse> getFacture(@PathVariable Long id) {
         Optional<Facture> optionalFacture = factureService.findOne(id);
 
@@ -131,7 +132,7 @@ public class FactureResource {
         return ResponseEntity.ok(factureMapper.mapFactureToResponse(facture));
     }
 
-    @GetMapping(value = "/factures/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PDF_VALUE)
     public ResponseEntity<Resource> getFacturePdf(@PathVariable long id) {
 
         ByteArrayOutputStream byteArrayOutputStream = factureService.generateFactureWithJasper(id);
@@ -140,7 +141,7 @@ public class FactureResource {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=facture_" + id + ".pdf");
         header.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-        header.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        header.add(HttpHeaders.CONTENT_TYPE, APPLICATION_PDF_VALUE);
         header.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(bytes.length));
 
         ByteArrayResource resource = new ByteArrayResource(bytes);
@@ -154,13 +155,13 @@ public class FactureResource {
      * @param id the id of the facture to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/factures/{id}")
+    @DeleteMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteFacture(@PathVariable Long id) {
         factureService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
-    @PostMapping("/factures/display-for-datatable")
+    @PostMapping(value = "/display-for-datatable", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FactureDTO>> getFacture() {
         List<Entreprise> entreprises = entrepriseService.getEntreprisesOfCurrentUser();
         long entrepriseId = 0;

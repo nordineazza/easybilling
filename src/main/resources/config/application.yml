@@ -31,7 +31,7 @@ management:
       mode: full
   health:
     mail:
-      enabled: false # When using the MailService, configure an SMTP server and set this to true
+      enabled: true # When using the MailService, configure an SMTP server and set this to true
   metrics:
     export:
       # Prometheus is the default metrics backend
@@ -71,6 +71,19 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://${DB_HOST}:3306/EasyBilling?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
   jpa:
     open-in-view: false
     properties:
@@ -111,6 +124,16 @@ spring:
   output:
     ansi:
       console-available: true
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    protocol: smtp
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: ${SMTP_HOST}
 
 server:
   servlet:
@@ -132,18 +155,10 @@ info:
 jhipster:
   clientApp:
     name: 'easyBillingApp'
-  # By default CORS is disabled. Uncomment to enable.
-  # cors:
-  #     allowed-origins: "*"
-  #     allowed-methods: "*"
-  #     allowed-headers: "*"
-  #     exposed-headers: "Authorization,Link,X-Total-Count"
-  #     allow-credentials: true
-  #     max-age: 1800
   mail:
-    from: EasyBilling@localhost
+    from: response@easybilling.fr
   swagger:
-    default-include-pattern: /api/.*
+    default-include-pattern: /.*
     title: EasyBilling API
     description: EasyBilling API documentation
     version: 0.0.1

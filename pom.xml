@@ -35,7 +35,6 @@
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
-        <profile.tls />
 
         <!-- Dependency versions -->
         <jhipster-dependencies.version>3.9.0</jhipster-dependencies.version>
@@ -823,12 +822,6 @@
             </properties>
         </profile>
         <profile>
-            <id>tls</id>
-            <properties>
-                <profile.tls>,tls</profile.tls>
-            </properties>
-        </profile>
-        <profile>
             <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -846,7 +839,7 @@
             </dependencies>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -888,7 +881,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>

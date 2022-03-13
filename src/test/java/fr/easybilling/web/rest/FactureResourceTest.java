@@ -55,7 +55,7 @@ class FactureResourceTest {
 
         when(factureService.findOne(anyLong())).thenReturn(Optional.of(facture));
 
-        restFactureMockMvc.perform(get("/api/factures/" + 1)
+        restFactureMockMvc.perform(get("/factures/" + 1)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
@@ -65,7 +65,7 @@ class FactureResourceTest {
     void getFactureWhen404() throws Exception {
         when(factureService.findOne(anyLong())).thenReturn(Optional.empty());
 
-        restFactureMockMvc.perform(get("/api/factures/" + 1)
+        restFactureMockMvc.perform(get("/factures/" + 1)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
@@ -75,7 +75,7 @@ class FactureResourceTest {
     void updateFacture() throws Exception {
         FactureForm form = getFactureForm();
         when(factureService.findOne(anyLong())).thenReturn(Optional.of(getFactureDataSet()));
-        restFactureMockMvc.perform(put("/api/factures/1")
+        restFactureMockMvc.perform(put("/factures/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(form)))
             .andExpect(status().isNoContent());

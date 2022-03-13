@@ -28,7 +28,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testConcurrencyFailure() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/concurrency-failure"))
+        mockMvc.perform(get("/exception-translator-test/concurrency-failure"))
             .andExpect(status().isConflict())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
@@ -36,7 +36,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testMethodArgumentNotValid() throws Exception {
-         mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON))
+         mockMvc.perform(post("/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON))
              .andExpect(status().isBadRequest())
              .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
@@ -47,7 +47,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testMissingServletRequestPartException() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-part"))
+        mockMvc.perform(get("/exception-translator-test/missing-servlet-request-part"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"));
@@ -55,7 +55,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testMissingServletRequestParameterException() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-parameter"))
+        mockMvc.perform(get("/exception-translator-test/missing-servlet-request-parameter"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"));
@@ -63,7 +63,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testAccessDenied() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/access-denied"))
+        mockMvc.perform(get("/exception-translator-test/access-denied"))
             .andExpect(status().isForbidden())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.403"))
@@ -72,17 +72,17 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/unauthorized"))
+        mockMvc.perform(get("/exception-translator-test/unauthorized"))
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.401"))
-            .andExpect(jsonPath("$.path").value("/api/exception-translator-test/unauthorized"))
+            .andExpect(jsonPath("$.path").value("/exception-translator-test/unauthorized"))
             .andExpect(jsonPath("$.detail").value("test authentication failed!"));
     }
 
     @Test
     public void testMethodNotSupported() throws Exception {
-        mockMvc.perform(post("/api/exception-translator-test/access-denied"))
+        mockMvc.perform(post("/exception-translator-test/access-denied"))
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.405"))
@@ -91,7 +91,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testExceptionWithResponseStatus() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/response-status"))
+        mockMvc.perform(get("/exception-translator-test/response-status"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"))
@@ -100,7 +100,7 @@ public class ExceptionTranslatorIT {
 
     @Test
     public void testInternalServerError() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/internal-server-error"))
+        mockMvc.perform(get("/exception-translator-test/internal-server-error"))
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.500"))

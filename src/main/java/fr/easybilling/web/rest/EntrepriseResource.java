@@ -21,7 +21,7 @@ import java.util.Optional;
  * REST controller for managing {@link fr.easybilling.domain.Entreprise}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/entreprises")
 public class EntrepriseResource {
 
     private final Logger log = LoggerFactory.getLogger(EntrepriseResource.class);
@@ -44,14 +44,14 @@ public class EntrepriseResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new entreprise, or with status {@code 400 (Bad Request)} if the entreprise has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/entreprises")
+    @PostMapping
     public ResponseEntity<Entreprise> createEntreprise(@RequestBody Entreprise entreprise) throws URISyntaxException {
         log.debug("REST request to save Entreprise : {}", entreprise);
         if (entreprise.getId() != null) {
             throw new BadRequestAlertException("A new entreprise cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Entreprise result = entrepriseService.save(entreprise);
-        return ResponseEntity.created(new URI("/api/entreprises/" + result.getId()))
+        return ResponseEntity.created(new URI("/entreprises/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -65,7 +65,7 @@ public class EntrepriseResource {
      * or with status {@code 500 (Internal Server Error)} if the entreprise couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/entreprises")
+    @PutMapping
     public ResponseEntity<Entreprise> updateEntreprise(@RequestBody Entreprise entreprise) throws URISyntaxException {
         log.debug("REST request to update Entreprise : {}", entreprise);
         if (entreprise.getId() == null) {
@@ -82,7 +82,7 @@ public class EntrepriseResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of entreprises in body.
      */
-    @GetMapping("/entreprises")
+    @GetMapping
     public List<Entreprise> getAllEntreprises() {
         log.debug("REST request to get all Entreprises");
         return entrepriseService.findAll();
@@ -94,7 +94,7 @@ public class EntrepriseResource {
      * @param id the id of the entreprise to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the entreprise, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/entreprises/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Entreprise> getEntreprise(@PathVariable Long id) {
         log.debug("REST request to get Entreprise : {}", id);
         Optional<Entreprise> entreprise = entrepriseService.findOne(id);
@@ -107,7 +107,7 @@ public class EntrepriseResource {
      * @param id the id of the entreprise to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/entreprises/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEntreprise(@PathVariable Long id) {
         log.debug("REST request to delete Entreprise : {}", id);
         entrepriseService.delete(id);

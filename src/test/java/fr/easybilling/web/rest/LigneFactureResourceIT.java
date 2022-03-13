@@ -87,7 +87,7 @@ public class LigneFactureResourceIT {
     public void createLigneFacture() throws Exception {
         int databaseSizeBeforeCreate = ligneFactureRepository.findAll().size();
         // Create the LigneFacture
-        restLigneFactureMockMvc.perform(post("/api/ligne-factures")
+        restLigneFactureMockMvc.perform(post("/ligne-factures")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(ligneFacture)))
             .andExpect(status().isCreated());
@@ -110,7 +110,7 @@ public class LigneFactureResourceIT {
         ligneFacture.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restLigneFactureMockMvc.perform(post("/api/ligne-factures")
+        restLigneFactureMockMvc.perform(post("/ligne-factures")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(ligneFacture)))
             .andExpect(status().isBadRequest());
@@ -128,7 +128,7 @@ public class LigneFactureResourceIT {
         ligneFactureRepository.saveAndFlush(ligneFacture);
 
         // Get all the ligneFactureList
-        restLigneFactureMockMvc.perform(get("/api/ligne-factures?sort=id,desc"))
+        restLigneFactureMockMvc.perform(get("/ligne-factures?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ligneFacture.getId().intValue())))
@@ -136,7 +136,7 @@ public class LigneFactureResourceIT {
             .andExpect(jsonPath("$.[*].quantite").value(hasItem(DEFAULT_QUANTITE)))
             .andExpect(jsonPath("$.[*].prixHt").value(hasItem(DEFAULT_PRIX_HT.intValue())));
     }
-    
+
     @Test
     @Transactional
     public void getLigneFacture() throws Exception {
@@ -144,7 +144,7 @@ public class LigneFactureResourceIT {
         ligneFactureRepository.saveAndFlush(ligneFacture);
 
         // Get the ligneFacture
-        restLigneFactureMockMvc.perform(get("/api/ligne-factures/{id}", ligneFacture.getId()))
+        restLigneFactureMockMvc.perform(get("/ligne-factures/{id}", ligneFacture.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(ligneFacture.getId().intValue()))
@@ -156,7 +156,7 @@ public class LigneFactureResourceIT {
     @Transactional
     public void getNonExistingLigneFacture() throws Exception {
         // Get the ligneFacture
-        restLigneFactureMockMvc.perform(get("/api/ligne-factures/{id}", Long.MAX_VALUE))
+        restLigneFactureMockMvc.perform(get("/ligne-factures/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
@@ -177,7 +177,7 @@ public class LigneFactureResourceIT {
             .quantite(UPDATED_QUANTITE)
             .prixHt(UPDATED_PRIX_HT);
 
-        restLigneFactureMockMvc.perform(put("/api/ligne-factures")
+        restLigneFactureMockMvc.perform(put("/ligne-factures")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedLigneFacture)))
             .andExpect(status().isOk());
@@ -197,7 +197,7 @@ public class LigneFactureResourceIT {
         int databaseSizeBeforeUpdate = ligneFactureRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restLigneFactureMockMvc.perform(put("/api/ligne-factures")
+        restLigneFactureMockMvc.perform(put("/ligne-factures")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(ligneFacture)))
             .andExpect(status().isBadRequest());
@@ -216,7 +216,7 @@ public class LigneFactureResourceIT {
         int databaseSizeBeforeDelete = ligneFactureRepository.findAll().size();
 
         // Delete the ligneFacture
-        restLigneFactureMockMvc.perform(delete("/api/ligne-factures/{id}", ligneFacture.getId())
+        restLigneFactureMockMvc.perform(delete("/ligne-factures/{id}", ligneFacture.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

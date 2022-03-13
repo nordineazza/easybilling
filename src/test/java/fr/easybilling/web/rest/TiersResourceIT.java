@@ -120,7 +120,7 @@ public class TiersResourceIT {
     public void createTiers() throws Exception {
         int databaseSizeBeforeCreate = tiersRepository.findAll().size();
         // Create the Tiers
-        restTiersMockMvc.perform(post("/api/tiers")
+        restTiersMockMvc.perform(post("/tiers")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(tiers)))
             .andExpect(status().isCreated());
@@ -149,7 +149,7 @@ public class TiersResourceIT {
         tiers.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restTiersMockMvc.perform(post("/api/tiers")
+        restTiersMockMvc.perform(post("/tiers")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(tiers)))
             .andExpect(status().isBadRequest());
@@ -167,7 +167,7 @@ public class TiersResourceIT {
         tiersRepository.saveAndFlush(tiers);
 
         // Get all the tiersList
-        restTiersMockMvc.perform(get("/api/tiers?sort=id,desc"))
+        restTiersMockMvc.perform(get("/tiers?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(tiers.getId().intValue())))
@@ -181,7 +181,7 @@ public class TiersResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].inscrit").value(hasItem(DEFAULT_INSCRIT.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getTiers() throws Exception {
@@ -189,7 +189,7 @@ public class TiersResourceIT {
         tiersRepository.saveAndFlush(tiers);
 
         // Get the tiers
-        restTiersMockMvc.perform(get("/api/tiers/{id}", tiers.getId()))
+        restTiersMockMvc.perform(get("/tiers/{id}", tiers.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(tiers.getId().intValue()))
@@ -207,7 +207,7 @@ public class TiersResourceIT {
     @Transactional
     public void getNonExistingTiers() throws Exception {
         // Get the tiers
-        restTiersMockMvc.perform(get("/api/tiers/{id}", Long.MAX_VALUE))
+        restTiersMockMvc.perform(get("/tiers/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
@@ -234,7 +234,7 @@ public class TiersResourceIT {
             .email(UPDATED_EMAIL)
             .inscrit(UPDATED_INSCRIT);
 
-        restTiersMockMvc.perform(put("/api/tiers")
+        restTiersMockMvc.perform(put("/tiers")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedTiers)))
             .andExpect(status().isOk());
@@ -260,7 +260,7 @@ public class TiersResourceIT {
         int databaseSizeBeforeUpdate = tiersRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restTiersMockMvc.perform(put("/api/tiers")
+        restTiersMockMvc.perform(put("/tiers")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(tiers)))
             .andExpect(status().isBadRequest());
@@ -279,7 +279,7 @@ public class TiersResourceIT {
         int databaseSizeBeforeDelete = tiersRepository.findAll().size();
 
         // Delete the tiers
-        restTiersMockMvc.perform(delete("/api/tiers/{id}", tiers.getId())
+        restTiersMockMvc.perform(delete("/tiers/{id}", tiers.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

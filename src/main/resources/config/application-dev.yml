@@ -24,8 +24,6 @@ spring:
     active: dev
     include:
       - swagger
-      # Uncomment to activate TLS for the dev profile
-      #- tls
   devtools:
     restart:
       enabled: true
@@ -35,34 +33,11 @@ spring:
   jackson:
     serialization:
       indent-output: true
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://${DB_HOST}:3306/EasyBilling?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    hikari:
-      poolName: Hikari
-      auto-commit: false
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
   jpa:
     show-sql: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev
-  mail:
-    host: ${SMTP_HOST}
-    port: ${SMTP_PORT}
-    username: ${SMTP_USERNAME}
-    password: ${SMTP_PASSWORD}
-    protocol: smtp
-    properties.mail.smtp:
-      auth: true
-      starttls.enable: true
-      ssl.trust: ${SMTP_HOST}
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -99,7 +74,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:8080
+    base-url: http://localhost:4200
   metrics:
     logs: # Reports metrics in the logs
       enabled: false

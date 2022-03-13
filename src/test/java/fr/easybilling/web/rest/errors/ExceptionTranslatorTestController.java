@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/api/exception-translator-test")
+@RequestMapping("/exception-translator-test")
 public class ExceptionTranslatorTestController {
 
     @GetMapping("/concurrency-failure")

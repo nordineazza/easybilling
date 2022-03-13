@@ -49,7 +49,7 @@ public class JWTFilterTest {
         String jwt = tokenProvider.createToken(authentication, false);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        request.setRequestURI("/api/test");
+        request.setRequestURI("/test");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
@@ -63,7 +63,7 @@ public class JWTFilterTest {
         String jwt = "wrong_jwt";
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        request.setRequestURI("/api/test");
+        request.setRequestURI("/test");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
@@ -74,7 +74,7 @@ public class JWTFilterTest {
     @Test
     public void testJWTFilterMissingAuthorization() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/test");
+        request.setRequestURI("/test");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
@@ -86,7 +86,7 @@ public class JWTFilterTest {
     public void testJWTFilterMissingToken() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
-        request.setRequestURI("/api/test");
+        request.setRequestURI("/test");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
@@ -104,7 +104,7 @@ public class JWTFilterTest {
         String jwt = tokenProvider.createToken(authentication, false);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
-        request.setRequestURI("/api/test");
+        request.setRequestURI("/test");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);

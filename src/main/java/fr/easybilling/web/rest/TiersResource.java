@@ -21,7 +21,7 @@ import java.util.Optional;
  * REST controller for managing {@link fr.easybilling.domain.Tiers}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/tiers")
 public class TiersResource {
 
     private final Logger log = LoggerFactory.getLogger(TiersResource.class);
@@ -44,14 +44,14 @@ public class TiersResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new tiers, or with status {@code 400 (Bad Request)} if the tiers has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/tiers")
+    @PostMapping
     public ResponseEntity<Tiers> createTiers(@RequestBody Tiers tiers) throws URISyntaxException {
         log.debug("REST request to save Tiers : {}", tiers);
         if (tiers.getId() != null) {
             throw new BadRequestAlertException("A new tiers cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Tiers result = tiersService.save(tiers);
-        return ResponseEntity.created(new URI("/api/tiers/" + result.getId()))
+        return ResponseEntity.created(new URI("/tiers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -65,7 +65,7 @@ public class TiersResource {
      * or with status {@code 500 (Internal Server Error)} if the tiers couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/tiers")
+    @PutMapping
     public ResponseEntity<Tiers> updateTiers(@RequestBody Tiers tiers) throws URISyntaxException {
         log.debug("REST request to update Tiers : {}", tiers);
         if (tiers.getId() == null) {
@@ -82,7 +82,7 @@ public class TiersResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tiers in body.
      */
-    @GetMapping("/tiers")
+    @GetMapping
     public List<Tiers> getAllTiers() {
         log.debug("REST request to get all Tiers");
         return tiersService.findAll();
@@ -94,7 +94,7 @@ public class TiersResource {
      * @param id the id of the tiers to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the tiers, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/tiers/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Tiers> getTiers(@PathVariable Long id) {
         log.debug("REST request to get Tiers : {}", id);
         Optional<Tiers> tiers = tiersService.findOne(id);
@@ -107,7 +107,7 @@ public class TiersResource {
      * @param id the id of the tiers to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/tiers/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTiers(@PathVariable Long id) {
         log.debug("REST request to delete Tiers : {}", id);
         tiersService.delete(id);

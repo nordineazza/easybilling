@@ -111,7 +111,7 @@ public class FactureResourceIT {
         FactureForm factureForm = getFactureForm();
 
         // Create the Facture
-        restFactureMockMvc.perform(post("/api/factures")
+        restFactureMockMvc.perform(post("/factures")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(factureForm)))
             .andExpect(status().isCreated());
@@ -159,7 +159,9 @@ public class FactureResourceIT {
         factureRepository.saveAndFlush(facture);
 
         // Get the facture
-        restFactureMockMvc.perform(get("/api/factures/{id}", facture.getId()))
+        restFactureMockMvc.perform(get("/factures/{id}", facture.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(facture.getId().intValue()))
@@ -177,7 +179,9 @@ public class FactureResourceIT {
     @Transactional
     void getNonExistingFacture() throws Exception {
         // Get the facture
-        restFactureMockMvc.perform(get("/api/factures/{id}", Long.MAX_VALUE))
+        restFactureMockMvc.perform(get("/factures/{id}", Long.MAX_VALUE)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
@@ -199,7 +203,7 @@ public class FactureResourceIT {
             .tva(UPDATED_TVA)
             .status(UPDATED_STATUS);
 
-        restFactureMockMvc.perform(put("/api/factures/{id}", facture.getId())
+        restFactureMockMvc.perform(put("/factures/{id}", facture.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedFacture)))
             .andExpect(status().isNoContent());
@@ -218,7 +222,7 @@ public class FactureResourceIT {
         int databaseSizeBeforeUpdate = factureRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restFactureMockMvc.perform(put("/api/factures/10")
+        restFactureMockMvc.perform(put("/factures/10")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(facture)))
             .andExpect(status().isNotFound());
@@ -237,8 +241,9 @@ public class FactureResourceIT {
         int databaseSizeBeforeDelete = factureRepository.findAll().size();
 
         // Delete the facture
-        restFactureMockMvc.perform(delete("/api/factures/{id}", facture.getId())
-            .accept(MediaType.APPLICATION_JSON))
+        restFactureMockMvc.perform(delete("/factures/{id}", facture.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

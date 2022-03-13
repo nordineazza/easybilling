@@ -52,7 +52,7 @@ public class UserJWTControllerIT {
         LoginVM login = new LoginVM();
         login.setEmail("user-jwt-controller");
         login.setPassword("test");
-        mockMvc.perform(post("/api/authenticate")
+        mockMvc.perform(post("/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
@@ -77,7 +77,7 @@ public class UserJWTControllerIT {
         login.setEmail("user-jwt-controller-remember-me");
         login.setPassword("test");
         login.setRememberMe(true);
-        mockMvc.perform(post("/api/authenticate")
+        mockMvc.perform(post("/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
@@ -92,7 +92,7 @@ public class UserJWTControllerIT {
         LoginVM login = new LoginVM();
         login.setEmail("wrong-user");
         login.setPassword("wrong password");
-        mockMvc.perform(post("/api/authenticate")
+        mockMvc.perform(post("/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())

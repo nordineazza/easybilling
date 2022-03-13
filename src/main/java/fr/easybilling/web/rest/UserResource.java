@@ -59,7 +59,7 @@ import java.util.*;
  * Another option would be to have a specific JPA entity graph to handle this case.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class UserResource {
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
 
@@ -107,7 +107,7 @@ public class UserResource {
         } else {
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
-            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+            return ResponseEntity.created(new URI("/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName,  "userManagement.created", newUser.getLogin()))
                 .body(newUser);
         }

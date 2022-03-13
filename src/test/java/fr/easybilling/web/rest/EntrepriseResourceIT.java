@@ -82,7 +82,7 @@ public class EntrepriseResourceIT {
     public void createEntreprise() throws Exception {
         int databaseSizeBeforeCreate = entrepriseRepository.findAll().size();
         // Create the Entreprise
-        restEntrepriseMockMvc.perform(post("/api/entreprises")
+        restEntrepriseMockMvc.perform(post("/entreprises")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(entreprise)))
             .andExpect(status().isCreated());
@@ -103,7 +103,7 @@ public class EntrepriseResourceIT {
         entreprise.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restEntrepriseMockMvc.perform(post("/api/entreprises")
+        restEntrepriseMockMvc.perform(post("/entreprises")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(entreprise)))
             .andExpect(status().isBadRequest());
@@ -121,13 +121,13 @@ public class EntrepriseResourceIT {
         entrepriseRepository.saveAndFlush(entreprise);
 
         // Get all the entrepriseList
-        restEntrepriseMockMvc.perform(get("/api/entreprises?sort=id,desc"))
+        restEntrepriseMockMvc.perform(get("/entreprises"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(entreprise.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getEntreprise() throws Exception {
@@ -135,7 +135,7 @@ public class EntrepriseResourceIT {
         entrepriseRepository.saveAndFlush(entreprise);
 
         // Get the entreprise
-        restEntrepriseMockMvc.perform(get("/api/entreprises/{id}", entreprise.getId()))
+        restEntrepriseMockMvc.perform(get("/entreprises/{id}", entreprise.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(entreprise.getId().intValue()))
@@ -145,7 +145,7 @@ public class EntrepriseResourceIT {
     @Transactional
     public void getNonExistingEntreprise() throws Exception {
         // Get the entreprise
-        restEntrepriseMockMvc.perform(get("/api/entreprises/{id}", Long.MAX_VALUE))
+        restEntrepriseMockMvc.perform(get("/entreprises/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
@@ -164,7 +164,7 @@ public class EntrepriseResourceIT {
         updatedEntreprise
             .creationDate(UPDATED_CREATION_DATE);
 
-        restEntrepriseMockMvc.perform(put("/api/entreprises")
+        restEntrepriseMockMvc.perform(put("/entreprises")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedEntreprise)))
             .andExpect(status().isOk());
@@ -182,7 +182,7 @@ public class EntrepriseResourceIT {
         int databaseSizeBeforeUpdate = entrepriseRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restEntrepriseMockMvc.perform(put("/api/entreprises")
+        restEntrepriseMockMvc.perform(put("/entreprises")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(entreprise)))
             .andExpect(status().isBadRequest());
@@ -201,7 +201,7 @@ public class EntrepriseResourceIT {
         int databaseSizeBeforeDelete = entrepriseRepository.findAll().size();
 
         // Delete the entreprise
-        restEntrepriseMockMvc.perform(delete("/api/entreprises/{id}", entreprise.getId())
+        restEntrepriseMockMvc.perform(delete("/entreprises/{id}", entreprise.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
